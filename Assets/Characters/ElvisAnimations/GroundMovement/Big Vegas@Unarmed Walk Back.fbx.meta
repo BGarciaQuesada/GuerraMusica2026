@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 45dd3a7011d0cb84788a7f13e5e476fd
+guid: 8d467f522d01e304cb3feb551cc9262a
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,11 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Unarmed Idle
+      name: Walk Back
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 114
+      lastFrame: 77
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
