@@ -84,14 +84,18 @@ public class EnemyAI : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
+            // Calcula una posición dentro del radio de patrulla
             Vector3 randomPos = transform.position + Random.insideUnitSphere * patrolRadius;
+            // Intenta buscar ese punto en el NavMesh
             if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, patrolRadius, NavMesh.AllAreas))
             {
+                // ¿Encontrado? Tomar el punto
                 point = hit.position;
                 return true;
             }
         }
 
+        // ¿No encontrado? Nada
         point = Vector3.zero;
         return false;
     }
@@ -131,8 +135,8 @@ public class EnemyAI : MonoBehaviour
         state = EnemyState.Combat;
         agent.isStopped = true;
 
-        // Aquí llamas a tu sistema de combate
         Debug.Log("Combate iniciado");
+        // Llamar a que inicie el combate
     }
 
     public void OnBattleFinished()
