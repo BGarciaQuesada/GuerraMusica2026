@@ -27,12 +27,21 @@ public class BattleController : MonoBehaviour
         minigame.RecieveHit();
     }
 
-    void HandleHit(bool acierto)
+    // Coge el enum HitPrecision del minijuego que es publico y según la situación, tal...
+    void HandleHit(HitPrecision precision)
     {
-        if (acierto)
-            Debug.Log("Golpe");
-        else
-            Debug.Log("Fallo");
+        switch (precision)
+        {
+            case HitPrecision.Perfect:
+                Debug.Log("PERFECT");
+                break;
+            case HitPrecision.Good:
+                Debug.Log("GOOD");
+                break;
+            case HitPrecision.Miss:
+                Debug.Log("MISS");
+                break;
+        }
     }
 
     void FinishMinigame()

@@ -1,11 +1,21 @@
 using UnityEngine;
 using System;
 
+// [!] Como quiero que el daño dependa de la precisión del golpe, en vez de un bool que diga acierto o fallo,
+// devuelvo una enumeración con los distintos niveles de precisión.
+public enum HitPrecision
+{
+    Perfect,
+    Good,
+    Miss
+}
+
 public class AttackMinigame : MonoBehaviour
 {
     [Header("UI")]
     public RectTransform attackPanel;
-    public RectTransform successZone;
+    public RectTransform goodZone;
+    public RectTransform perfectZone;
     public RectTransform block;
 
     [Header("Configuración")]
@@ -13,13 +23,19 @@ public class AttackMinigame : MonoBehaviour
     public int minBlocks = 3;
     public int maxBlocks = 5;
 
+    [Header("Precisión (en píxeles desde el centro)")]
+    public float perfectRange = 15f;
+    public float goodRange = 40f;
+
     int remainingBlocks;
     RectTransform currentBlock;
     bool blockActivated;
     float endLimit;
 
+    
+
     // Evento que notifica al BattleController
-    public Action<bool> OnMinigameHit; // true = acierto, false = fallo
+    public Action<HitPrecision> OnMinigameHit; // true = acierto, false = fallo
     public Action OnFinishMinigame;
 
     void Start()
@@ -43,7 +59,7 @@ public class AttackMinigame : MonoBehaviour
         if (currentBlock.anchoredPosition.x > endLimit)
         {
             // Fallo automático si se pasa
-            HandleMiss();
+            RegisterHit(HitPrecision.Miss);
         }
     }
 
@@ -51,11 +67,8 @@ public class AttackMinigame : MonoBehaviour
     {
         if (!blockActivated) return;
 
-        bool acierto = isInSuccessZone();
-        OnMinigameHit?.Invoke(acierto);
-
-        DestroyBlock();
-        NextBlock();
+        HitPrecision precision = GetPrecisionFromZones();
+        RegisterHit(precision);
     }
 
     void NextBlock()
@@ -76,19 +89,29 @@ public class AttackMinigame : MonoBehaviour
         remainingBlocks--;
     }
 
-    bool isInSuccessZone()
+    HitPrecision GetPrecisionFromZones()
     {
-        float bloqueX = currentBlock.anchoredPosition.x;
+        float blockX = currentBlock.anchoredPosition.x;
 
-        float zonaMin = successZone.anchoredPosition.x - successZone.rect.width / 2;
-        float zonaMax = successZone.anchoredPosition.x + successZone.rect.width / 2;
+        if (IsInside(blockX, perfectZone))
+            return HitPrecision.Perfect;
 
-        return bloqueX >= zonaMin && bloqueX <= zonaMax;
+        if (IsInside(blockX, goodZone))
+            return HitPrecision.Good;
+
+        return HitPrecision.Miss;
     }
 
-    void HandleMiss()
+    bool IsInside(float blockX, RectTransform zone)
     {
-        OnMinigameHit?.Invoke(false);
+        float min = zone.anchoredPosition.x - zone.rect.width / 2;
+        float max = zone.anchoredPosition.x + zone.rect.width / 2;
+        return blockX >= min && blockX <= max;
+    }
+
+    void RegisterHit(HitPrecision precision)
+    {
+        OnMinigameHit?.Invoke(precision);
         DestroyBlock();
         NextBlock();
     }
