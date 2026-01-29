@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
         UpdateAnimator();
         CheckGround();
 
-        // Debug.Log(isWalking);
+        Debug.Log(isWalking);
     }
 
     // ================= MOVEMENT =================

@@ -991,45 +991,6 @@
                     "isPartOfComposite": false
                 }
             ]
-        },
-        {
-            "name": "Minigame",
-            "id": "cda9dd4e-b2aa-420f-adfe-6488f9e57dfd",
-            "actions": [
-                {
-                    "name": "Attack",
-                    "type": "Button",
-                    "id": "3666c2ef-cc08-4906-a0a9-07bb449f21c1",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "e9bb962e-2f96-4012-ad1f-832f051d7b51",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8be9b1d1-6001-4590-98f6-e98356bf492c",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
         }
     ],
     "controlSchemes": [
