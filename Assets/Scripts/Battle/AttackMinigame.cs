@@ -32,8 +32,6 @@ public class AttackMinigame : MonoBehaviour
     bool blockActivated;
     float endLimit;
 
-    
-
     // Evento que notifica al BattleController
     public Action<HitPrecision> OnMinigameHit; // true = acierto, false = fallo
     public Action OnFinishMinigame;

@@ -12,7 +12,8 @@ public class BattleController : MonoBehaviour
         minigame.OnMinigameHit += HandleHit;
         minigame.OnFinishMinigame += FinishMinigame;
 
-        StartAttack();
+        // Debug de Ataque
+        // StartAttack();
     }
 
     public void StartAttack()

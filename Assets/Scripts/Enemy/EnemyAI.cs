@@ -8,20 +8,32 @@ public enum EnemyState
     Combat
 }
 
+// Dejemos de olvidarnos grax
+[RequireComponent(typeof(NavMeshAgent))]
+
 public class EnemyAI : MonoBehaviour
 {
+    // [!] No quería que fuese por puntos. Quería que lo calculase por su cuenta. POR AHORA debería funcionar
     [Header("Patrulla")]
-    public Transform[] patrolPoints;
+    [SerializeField] float patrolRadius = 10f;
+    [SerializeField] float waitTimeAtPoint = 2f;
 
-    NavMeshAgent agent;
+    [Header("Chase")]
+    [SerializeField] float chaseSpeed = 4.5f;
+    [SerializeField] float patrolSpeed = 2f;
+
+    [SerializeField] NavMeshAgent agent;
     Transform player;
-    int patrolIndex;
+
     EnemyState state = EnemyState.Patrol;
-    
-    void Awake()
+
+    Vector3 currentPatrolPoint;
+    bool hasPatrolPoint;
+    float waitTimer;
+
+    void Start()
     {
-        // Obtener NavMeshAgent automáticamente
-        agent = GetComponent<NavMeshAgent>();
+        SetPatrol();
     }
 
     void Update()
@@ -42,33 +54,68 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    void Patrol()
+    #region Patrol
+    void SetPatrol()
     {
-        if (patrolPoints.Length == 0) return;
-
-        if (!agent.pathPending && agent.remainingDistance < 0.3f)
+        agent.speed = patrolSpeed;
+        hasPatrolPoint = TryGetRandomPatrolPoint(out currentPatrolPoint);
+        if (hasPatrolPoint)
         {
-            agent.SetDestination(patrolPoints[patrolIndex].position);
-            patrolIndex = (patrolIndex + 1) % patrolPoints.Length;
+            agent.SetDestination(currentPatrolPoint);
         }
     }
 
+    void Patrol()
+    {
+        if (!hasPatrolPoint) return;
+
+        if (!agent.pathPending && agent.remainingDistance < 0.3f)
+        {
+            waitTimer += Time.deltaTime;
+            if (waitTimer >= waitTimeAtPoint)
+            {
+                waitTimer = 0f;
+                SetPatrol();
+            }
+        }
+    }
+
+    bool TryGetRandomPatrolPoint(out Vector3 point)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Vector3 randomPos = transform.position + Random.insideUnitSphere * patrolRadius;
+            if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, patrolRadius, NavMesh.AllAreas))
+            {
+                point = hit.position;
+                return true;
+            }
+        }
+
+        point = Vector3.zero;
+        return false;
+    }
+    #endregion
+
+    #region Chase
     void Chase()
     {
         if (player == null) return;
+
         agent.SetDestination(player.position);
     }
 
-    // Llamado por DetectionZone
     public void OnPlayerDetected(Transform playerTransform)
     {
         if (state == EnemyState.Combat) return;
 
         player = playerTransform;
         state = EnemyState.Chase;
+        agent.speed = chaseSpeed;
     }
+    #endregion
 
-    // Contacto físico real
+    #region Combat
     void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Player"))
@@ -79,14 +126,18 @@ public class EnemyAI : MonoBehaviour
 
     void StartCombat()
     {
+        if (state == EnemyState.Combat) return;
+
         state = EnemyState.Combat;
         agent.isStopped = true;
 
-        // Entrar en batalla
+        // Aquí llamas a tu sistema de combate
+        Debug.Log("Combate iniciado");
     }
 
     public void OnBattleFinished()
     {
-        Destroy(gameObject); // enemigo derrotado
+        Destroy(gameObject);
     }
+    #endregion
 }
