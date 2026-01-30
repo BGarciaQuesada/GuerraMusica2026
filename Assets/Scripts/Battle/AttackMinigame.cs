@@ -106,7 +106,7 @@ public class AttackMinigame : MonoBehaviour
         float max = zone.anchoredPosition.x + zone.rect.width / 2;
         return blockX >= min && blockX <= max;
     }
-
+    
     void RegisterHit(HitPrecision precision)
     {
         OnMinigameHit?.Invoke(precision);

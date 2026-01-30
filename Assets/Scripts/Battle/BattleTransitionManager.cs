@@ -52,6 +52,8 @@ public class BattleTransitionManager : MonoBehaviour
         TeleportToBattle();
 
         Time.timeScale = 1f;
+
+        BattleController.Instance.StartBattle(currentEnemy);
     }
 
     void TeleportToBattle()

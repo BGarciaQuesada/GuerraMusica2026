@@ -15,21 +15,34 @@ public class EnemyAI : MonoBehaviour
 {
     // [!] No quería que fuese por puntos. Quería que lo calculase por su cuenta. POR AHORA debería funcionar
     [Header("Patrulla")]
-    [SerializeField] float patrolRadius = 10f;
-    [SerializeField] float waitTimeAtPoint = 2f;
+    [SerializeField] private float patrolRadius = 10f;
+    [SerializeField] private float waitTimeAtPoint = 2f;
 
     [Header("Chase")]
-    [SerializeField] float chaseSpeed = 4.5f;
-    [SerializeField] float patrolSpeed = 2f;
+    [SerializeField] private float chaseSpeed = 4.5f;
+    [SerializeField] private float patrolSpeed = 2f;
+
+    [Header("Stats")]
+    [SerializeField] int maxHP = 30;
+    private int currentHP;
+    private bool pendingDeath;
 
     [SerializeField] NavMeshAgent agent;
-    Transform player;
+    private Transform player;
 
-    EnemyState state = EnemyState.Patrol;
+    private EnemyState state = EnemyState.Patrol;
 
-    Vector3 currentPatrolPoint;
-    bool hasPatrolPoint;
-    float waitTimer;
+    private Vector3 currentPatrolPoint;
+    private bool hasPatrolPoint;
+    private float waitTimer;
+
+    // [!] Método flecha no explotes otra vez y entres en bucle grax
+    public bool IsPendingDeath => pendingDeath;
+
+    void Awake()
+    {
+        currentHP = maxHP;
+    }
 
     void Start()
     {
@@ -49,7 +62,7 @@ public class EnemyAI : MonoBehaviour
                 break;
 
             case EnemyState.Combat:
-                agent.isStopped = true;
+                // agent.isStopped = true;
                 break;
         }
     }
@@ -120,10 +133,12 @@ public class EnemyAI : MonoBehaviour
     #endregion
 
     #region Combat
-    void OnCollisionEnter(Collision collision)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
+            Debug.Log("Comenzar combate");
             StartCombat();
         }
     }
@@ -133,13 +148,33 @@ public class EnemyAI : MonoBehaviour
         if (state == EnemyState.Combat) return;
 
         state = EnemyState.Combat;
-        agent.isStopped = true;
+        // agent.isStopped = true;
 
         Debug.Log("Combate iniciado");
+
         // Llamar a que inicie el combate
+        BattleTransitionManager.Instance.StartBattleTransition(
+            player,
+            this
+        );
     }
 
-    public void OnBattleFinished()
+    public void TakeDamage(int dmg)
+    {
+        if (pendingDeath) return;
+
+        currentHP -= dmg;
+
+        if (currentHP <= 0)
+        {
+            currentHP = 0;
+            pendingDeath = true; // PONEMOS LA VANDERA DE QUE SE MUERA PORQUE SI SE DESTRUYE AQUÍ TE SACA AL MUNDO CON EL MINIJUEGO
+            Debug.Log("Enemigo derrotado (pendiente de finalizar turno)");
+        }
+    }
+
+    // [!] Total, BattleController tiene a EnemyAI, puedo llamarlo en vez de hacer callbacks entre ellos como una loca
+    public void Die()
     {
         Destroy(gameObject);
     }
