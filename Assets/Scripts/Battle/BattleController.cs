@@ -8,10 +8,13 @@ public class BattleController : MonoBehaviour
     public static BattleController Instance;
 
     EnemyAI currentEnemy; // Solo va a ser 1 por batalla, nada de arrays
+    EnemyHealth enemyHealth;
+    EnemyCombat enemyCombat;
 
     public AttackMinigame minigame;
     public PlayerInput playerInput;
-    int damage = 0;
+
+    int damage;
 
     // Singleton (Esto hace actualmente que Big Vegas no se destruya OnLoad... No pasa nada, ¿no?)
     void Awake()
@@ -38,6 +41,10 @@ public class BattleController : MonoBehaviour
     public void StartBattle(EnemyAI enemy)
     {
         currentEnemy = enemy;
+
+        enemyHealth = enemy.GetComponent<EnemyHealth>();
+        enemyCombat = enemy.GetComponent<EnemyCombat>();
+
         StartPlayerTurn();
     }
 
@@ -76,18 +83,13 @@ public class BattleController : MonoBehaviour
     
     void FinishMinigame()
     {
-        if (currentEnemy != null)
-        {
-            // Hay enemigo, recibe daño
-            currentEnemy.TakeDamage(damage);
+        // Ya no estoy llamando a enemigo como tal sino a enemy health, así que no necesito liarme de que exista
+        enemyHealth.TakeDamage(damage);
 
-            // ¿Suficiente daño como para morirse?
-            if (currentEnemy.IsPendingDeath)
-            {
-                // Hala
-                EndBattle();
-                return;
-            }
+        if (enemyHealth.IsDead)
+        {
+            EndBattle();
+            return;
         }
 
         // El enemigo NO está esperando a morirse, que empiece el enemigo
@@ -96,7 +98,11 @@ public class BattleController : MonoBehaviour
 
     void StartEnemyTurn()
     {
-        // Placeholder enemigo (literal se espera un rato para darle otra vez el turno al jugador ahora mismo)
+        // Coge el daño del enemigo, lo imprime (debería aplicarse a la salud del jugador en un futuro), se espera, invoca fin de turno enemigo.
+        int dmg = enemyCombat.GetAttackDamage();
+
+        Debug.Log($"Enemigo ataca con {dmg} de daño");
+
         Invoke(nameof(EndEnemyTurn), 1.5f);
     }
 

@@ -718,6 +718,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: EsqueletoFlamenco
       objectReference: {fileID: 0}
+    - target: {fileID: 5908644087532525017, guid: 3bb0b31dcb555564593eb52fef24d853, type: 3}
+      propertyPath: m_Name
+      value: DetectionRadius
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608612582787040487, guid: 3bb0b31dcb555564593eb52fef24d853, type: 3}
+      propertyPath: m_Radius
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
