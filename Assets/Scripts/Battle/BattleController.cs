@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,9 +12,13 @@ public class BattleController : MonoBehaviour
     EnemyHealth enemyHealth;
     EnemyCombat enemyCombat;
 
-    public AttackMinigame minigame;
+    public BattleMenu battleMenu;
+    public AttackMenu attackMenu;
+    public RunMinigame runMinigame;
+    public AttackMinigame attackMinigame;
     public PlayerInput playerInput;
 
+    SO_Skill currentSkill;
     int damage;
 
     // Singleton (Esto hace actualmente que Big Vegas no se destruya OnLoad... No pasa nada, ¿no?)
@@ -31,8 +36,14 @@ public class BattleController : MonoBehaviour
     void Start()
     {
         // Conectar eventos del minijuego
-        minigame.OnMinigameHit += HandleHit;
-        minigame.OnFinishMinigame += FinishMinigame;
+        attackMinigame.OnMinigameHit += HandleHit;
+        attackMinigame.OnFinishMinigame += FinishMinigame;
+
+        attackMenu.OnSkillSelected += StartSkill;
+        runMinigame.OnFinished += TryEscape;
+
+        attackMinigame.OnMinigameHit += HandleHit;
+        attackMinigame.OnFinishMinigame += FinishMinigame;
 
         // Debug de Ataque
         // StartAttack();
@@ -51,34 +62,23 @@ public class BattleController : MonoBehaviour
     // Los pongo en métodos separados porque es posible que reuse esto sin pasarle nada...
     void StartPlayerTurn()
     {
-        playerInput.SwitchCurrentActionMap("Minigame");
-        damage = 0;
-        minigame.StartMinigame();
+        battleMenu.Open();
     }
 
-    public void OnAttack(InputValue value)
+    void StartSkill(SO_Skill skill)
     {
-        // Debug.Log("Input recibido en BattleController");
-        minigame.RecieveHit();
+        currentSkill = skill;
+
+        damage = 0;
+        battleMenu.Close();
+
+        attackMinigame.StartMinigame();
     }
 
-    // Coge el enum HitPrecision del minijuego que es publico y según la situación, tal...
     void HandleHit(HitPrecision precision)
     {
-        switch (precision)
-        {
-            case HitPrecision.Perfect:
-                Debug.Log("PERFECT");
-                damage += 20;
-                break;
-            case HitPrecision.Good:
-                Debug.Log("GOOD");
-                damage += 10;
-                break;
-            case HitPrecision.Miss:
-                Debug.Log("MISS");
-                break;
-        }
+        // Ahora el switch está en skill
+        damage += currentSkill.GetDamage(precision);
     }
     
     void FinishMinigame()
@@ -103,12 +103,16 @@ public class BattleController : MonoBehaviour
 
         Debug.Log($"Enemigo ataca con {dmg} de daño");
 
-        Invoke(nameof(EndEnemyTurn), 1.5f);
+        // [!] El método de EndEnemyTurn al final no iba a llegar a más, suprimido
+        Invoke(nameof(StartPlayerTurn), 1.5f);
     }
 
-    void EndEnemyTurn()
+    void TryEscape(bool success)
     {
-        StartPlayerTurn();
+        if (success)
+            EndBattle();
+        else
+            StartEnemyTurn();
     }
 
     void EndBattle()
@@ -116,7 +120,7 @@ public class BattleController : MonoBehaviour
         BattleTransitionManager.Instance.EndBattle();
         playerInput.SwitchCurrentActionMap("Player");
 
+        battleMenu.Close();
         currentEnemy.Die();
-        currentEnemy = null;
     }
 }

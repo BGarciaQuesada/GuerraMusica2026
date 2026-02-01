@@ -1,0 +1,38 @@
+using UnityEngine;
+
+/* Para mi yo futuro y quien sea que trabaje en esto:
+ * MonoBehaviour -> Vive en la escena (va asociado a algo y se puede destruir)
+ * ScriptableObject -> Vive como un ARCHIVO .ASSET (aka. PARA DATOS)
+ * 
+ * Resumen: es una plantilla
+ */
+
+// Esto de aquí es para que salga en el menú de Unity al hacer clic derecho y no estar media hora copiando y pegando
+[CreateAssetMenu(fileName = "SO_Skill", menuName = "Scriptable Objects/SO_Skill")]
+public class SO_Skill : ScriptableObject
+{
+    public string skillName;
+
+    public int perfectDamage = 20;
+    public int goodDamage = 10;
+    public bool stun;
+    public bool buff;
+
+    // Coge el enum HitPrecision del minijuego que es publico y según la situación, tal...
+    public int GetDamage(HitPrecision precision)
+    {
+        switch (precision)
+        {
+            case HitPrecision.Perfect:
+                Debug.Log("PERFECT");
+                return perfectDamage;
+            case HitPrecision.Good:
+                Debug.Log("GOOD");
+                return goodDamage;
+            default:
+                Debug.Log("MISS");
+                return 0;
+        }
+    }
+
+}
