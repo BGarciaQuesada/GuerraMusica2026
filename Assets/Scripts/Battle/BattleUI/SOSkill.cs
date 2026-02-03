@@ -8,13 +8,17 @@ using UnityEngine;
  */
 
 // Esto de aquí es para que salga en el menú de Unity al hacer clic derecho y no estar media hora copiando y pegando
-[CreateAssetMenu(fileName = "SO_Skill", menuName = "Scriptable Objects/SO_Skill")]
-public class SO_Skill : ScriptableObject
+[CreateAssetMenu(fileName = "SOSkill", menuName = "Scriptable Objects/SOSkill")]
+public class SOSkill : ScriptableObject
 {
     public string skillName;
 
+    [Header("Daño")]
     public int perfectDamage = 20;
     public int goodDamage = 10;
+
+    [Header("Efectos")]
+    public bool useMinigame;    // Si tiene minijuego o no
     public bool stun;
     public bool buff;
 

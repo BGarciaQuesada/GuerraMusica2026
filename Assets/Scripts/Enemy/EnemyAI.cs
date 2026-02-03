@@ -10,7 +10,6 @@ public enum EnemyState
 
 // Dejemos de olvidarnos grax
 [RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(EnemyHealth))]
 
 public class EnemyAI : MonoBehaviour
 {
@@ -26,7 +25,6 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] NavMeshAgent agent;
     private Transform player;
 
-    private Vector3 currentPatrolPoint;
     private float waitTimer;
 
     private EnemyState state = EnemyState.Patrol;
@@ -111,7 +109,7 @@ public class EnemyAI : MonoBehaviour
     }
     #endregion
 
-    #region Combat
+    #region Combat Initiation
 
     private void OnTriggerEnter(Collider other)
     {
@@ -138,7 +136,6 @@ public class EnemyAI : MonoBehaviour
         );
     }
 
-    // [!] Total, BattleController tiene a EnemyAI, puedo llamarlo en vez de hacer callbacks entre ellos como una loca
     public void Die()
     {
         Destroy(gameObject);

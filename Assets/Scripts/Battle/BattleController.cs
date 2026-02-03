@@ -7,18 +7,23 @@ using UnityEngine.InputSystem;
 public class BattleController : MonoBehaviour
 {
     public static BattleController Instance;
+    public PlayerInput playerInput;
 
+    [Header("Menus")]
+    public BattleMenu battleMenu;
+    public AttackMenu attackMenu;
+    public PartnerMenu partnerMenu;
+
+    [Header("Minijuegos")]
+    public AttackMinigame attackMinigame;
+    public RunMinigame runMinigame;
+
+    [Header("Datos Enemigo")]
     EnemyAI currentEnemy; // Solo va a ser 1 por batalla, nada de arrays
     EnemyHealth enemyHealth;
     EnemyCombat enemyCombat;
 
-    public BattleMenu battleMenu;
-    public AttackMenu attackMenu;
-    public RunMinigame runMinigame;
-    public AttackMinigame attackMinigame;
-    public PlayerInput playerInput;
-
-    SO_Skill currentSkill;
+    SOSkill currentSkill;
     int damage;
 
     // Singleton (Esto hace actualmente que Big Vegas no se destruya OnLoad... No pasa nada, ¿no?)
@@ -35,15 +40,21 @@ public class BattleController : MonoBehaviour
 
     void Start()
     {
-        // Conectar eventos del minijuego
-        attackMinigame.OnMinigameHit += HandleHit;
-        attackMinigame.OnFinishMinigame += FinishMinigame;
+        // Battle menu
+        battleMenu.OnAttack += OpenAttackMenu;
+        battleMenu.OnPartner += OpenPartnerMenu;
+        battleMenu.OnRun += StartRun;
 
-        attackMenu.OnSkillSelected += StartSkill;
-        runMinigame.OnFinished += TryEscape;
+        // Attack menu
+        attackMenu.OnSkillSelected += OnSkillSelected;
+        attackMenu.OnBack += ReturnToBattleMenu;
 
-        attackMinigame.OnMinigameHit += HandleHit;
-        attackMinigame.OnFinishMinigame += FinishMinigame;
+        // Partner menu
+        partnerMenu.OnBack += ReturnToBattleMenu;
+
+        // Minijuegos
+        attackMinigame.OnMinigameHit += OnHit;
+        attackMinigame.OnFinishMinigame += OnMinigameFinished;
 
         // Debug de Ataque
         // StartAttack();
@@ -56,71 +67,116 @@ public class BattleController : MonoBehaviour
         enemyHealth = enemy.GetComponent<EnemyHealth>();
         enemyCombat = enemy.GetComponent<EnemyCombat>();
 
+        enemyHealth.OnDeath += OnEnemyDeath;
+
         StartPlayerTurn();
     }
+
+    // ====== TURNO JUGADOR ======
 
     // Los pongo en métodos separados porque es posible que reuse esto sin pasarle nada...
     void StartPlayerTurn()
     {
         battleMenu.Open();
+        playerInput.SwitchCurrentActionMap("UI"); // No paro de usar ActionMaps, espero que no tenga consecuencias ( ._.)
     }
 
-    void StartSkill(SO_Skill skill)
+    void EndPlayerTurn()
     {
-        currentSkill = skill;
-
-        damage = 0;
         battleMenu.Close();
-
-        attackMinigame.StartMinigame();
-    }
-
-    void HandleHit(HitPrecision precision)
-    {
-        // Ahora el switch está en skill
-        damage += currentSkill.GetDamage(precision);
-    }
-    
-    void FinishMinigame()
-    {
-        // Ya no estoy llamando a enemigo como tal sino a enemy health, así que no necesito liarme de que exista
-        enemyHealth.TakeDamage(damage);
-
-        if (enemyHealth.IsDead)
-        {
-            EndBattle();
-            return;
-        }
-
-        // El enemigo NO está esperando a morirse, que empiece el enemigo
         StartEnemyTurn();
     }
 
+    // ====== TURNO ENEMIGO ======
+
     void StartEnemyTurn()
     {
-        // Coge el daño del enemigo, lo imprime (debería aplicarse a la salud del jugador en un futuro), se espera, invoca fin de turno enemigo.
+        Debug.Log("Turno enemigo");
+
         int dmg = enemyCombat.GetAttackDamage();
 
-        Debug.Log($"Enemigo ataca con {dmg} de daño");
+        Debug.Log("Enemigo pega con " + dmg);
 
-        // [!] El método de EndEnemyTurn al final no iba a llegar a más, suprimido
-        Invoke(nameof(StartPlayerTurn), 1.5f);
+        Invoke(nameof(StartPlayerTurn), 1.2f);
     }
 
-    void TryEscape(bool success)
+    // ====== MENÚS ======
+
+    void OpenAttackMenu()
     {
-        if (success)
-            EndBattle();
+        battleMenu.Close();
+        attackMenu.Open();
+    }
+
+    void OpenPartnerMenu()
+    {
+        battleMenu.Close();
+        partnerMenu.Open();
+    }
+
+    void ReturnToBattleMenu()
+    {
+        attackMenu.Close();
+        partnerMenu.Close();
+        battleMenu.Open();
+    }
+
+    // ====== SKILLS ======
+
+    void OnSkillSelected(SOSkill skill)
+    {
+        currentSkill = skill;
+        attackMenu.Close();
+
+        if (skill.useMinigame) // ¿Tiene minijuego?
+        {
+            // Llama al minijuego empezando a cero y va sumando
+            damage = 0;
+            playerInput.SwitchCurrentActionMap("Minigame");
+            attackMinigame.StartMinigame();
+        }
         else
-            StartEnemyTurn();
+        {
+            // Pedir daño directo
+            ApplySkillDirect(skill);
+            EndPlayerTurn();
+        }
     }
 
-    void EndBattle()
+    // Daño puro y duro
+    void ApplySkillDirect(SOSkill skill)
     {
+        enemyHealth.TakeDamage(skill.perfectDamage);
+    }
+
+    // ====== MINIJUEGOS ======
+
+    void OnHit(HitPrecision precision)
+    {
+        damage += currentSkill.GetDamage(precision);
+    }
+
+    void OnMinigameFinished()
+    {
+        enemyHealth.TakeDamage(damage);
+        EndPlayerTurn();
+    }
+
+    // ====== HUIR ======
+
+    void StartRun()
+    {
+        //runMinigame.StartGame();
+    }
+
+    // ====== FIN POR MUERTE ======
+
+    void OnEnemyDeath()
+    {
+        Debug.Log("Fin de batalla");
+
+        currentEnemy.Die();
         BattleTransitionManager.Instance.EndBattle();
         playerInput.SwitchCurrentActionMap("Player");
-
-        battleMenu.Close();
-        currentEnemy.Die();
     }
 }

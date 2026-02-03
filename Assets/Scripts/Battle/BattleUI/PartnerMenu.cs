@@ -1,19 +1,18 @@
 using System;
 using UnityEngine;
 
-public class AttackMenu : MonoBehaviour
+// Esto es como en el paper mario........
+public class PartnerMenu : MonoBehaviour
 {
-    public SOSkill[] skills;
-
-    public event Action<SOSkill> OnSkillSelected;
+    public event Action<int> OnPartnerSelected;
     public event Action OnBack;
 
     public void Open() => gameObject.SetActive(true);
     public void Close() => gameObject.SetActive(false);
 
-    public void SelectSkill(int index)
+    public void SelectPartner(int index)
     {
-        OnSkillSelected?.Invoke(skills[index]);
+        OnPartnerSelected?.Invoke(index);
     }
 
     public void BackPressed()
