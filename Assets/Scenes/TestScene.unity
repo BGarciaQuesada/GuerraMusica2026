@@ -1416,6 +1416,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Langosta2
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 91721fa90b8bc0b4f944923b7a16b59a, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 611ce48e98570f84fa7fa9e6eba85b89, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -8700617353114198275, guid: 91721fa90b8bc0b4f944923b7a16b59a, type: 3}
