@@ -2292,7 +2292,7 @@ GameObject:
   - component: {fileID: 5134918867689733546}
   m_Layer: 0
   m_Name: Big Vegas
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2429,8 +2429,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52132cb2f77dcb54cb942cf24d369759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleController
-  minigame: {fileID: 0}
   playerInput: {fileID: 6754274790042540049}
+  battleMenu: {fileID: 0}
+  attackMenu: {fileID: 0}
+  partnerMenu: {fileID: 0}
+  attackMinigame: {fileID: 0}
+  runMinigame: {fileID: 0}
 --- !u!1 &5623170208784760124
 GameObject:
   m_ObjectHideFlags: 0

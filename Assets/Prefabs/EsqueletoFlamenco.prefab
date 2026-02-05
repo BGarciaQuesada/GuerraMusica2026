@@ -1467,8 +1467,11 @@ GameObject:
   - component: {fileID: 4018869760418904916}
   - component: {fileID: 7000221190772891950}
   - component: {fileID: 9074634647064731902}
+  - component: {fileID: 4260744694176205042}
   - component: {fileID: 707696237989495844}
   - component: {fileID: 6038062409908433539}
+  - component: {fileID: 5094681987080718468}
+  - component: {fileID: 8156433105522485565}
   m_Layer: 0
   m_Name: EsqueletoFlamenco
   m_TagString: Untagged
@@ -1546,6 +1549,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &4260744694176205042
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4363482734121951726}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.7
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!195 &707696237989495844
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1585,6 +1611,32 @@ MonoBehaviour:
   chaseSpeed: 4.5
   patrolSpeed: 2
   agent: {fileID: 707696237989495844}
+--- !u!114 &5094681987080718468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4363482734121951726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87911b1967e5fd84fbae8e74e998ddac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCombat
+  attackDamage: 8
+--- !u!114 &8156433105522485565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4363482734121951726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 060338adf5e6aa34488eb2f68e9d2f42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  maxHP: 30
 --- !u!1 &4367598354481789713
 GameObject:
   m_ObjectHideFlags: 0
@@ -2427,7 +2479,7 @@ GameObject:
   - component: {fileID: 7608612582787040487}
   - component: {fileID: 6013689209619368441}
   m_Layer: 0
-  m_Name: SearchRadius
+  m_Name: DetectionRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2467,7 +2519,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 3
+  m_Radius: 2
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &6013689209619368441
 MonoBehaviour:
