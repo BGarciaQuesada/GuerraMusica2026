@@ -2,8 +2,6 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// [!] Oh Dios Santo, esta clase está engordando mucho, verás como llegue el momento donde lo tenga que separar.............
-
 public class BattleController : MonoBehaviour
 {
     public static BattleController Instance;
@@ -62,6 +60,8 @@ public class BattleController : MonoBehaviour
 
     public void StartBattle(EnemyAI enemy)
     {
+        Debug.Log("Comienza la batalla");
+
         currentEnemy = enemy;
 
         enemyHealth = enemy.GetComponent<EnemyHealth>();
@@ -77,14 +77,24 @@ public class BattleController : MonoBehaviour
     // Los pongo en métodos separados porque es posible que reuse esto sin pasarle nada...
     void StartPlayerTurn()
     {
+        Debug.Log("Turno del jugador, abre battle menu");
+
         battleMenu.Open();
         playerInput.SwitchCurrentActionMap("UI"); // No paro de usar ActionMaps, espero que no tenga consecuencias ( ._.)
     }
 
     void EndPlayerTurn()
     {
+        Debug.Log("Fin del turno del jugador, cierra battle menu");
+
         battleMenu.Close();
-        StartEnemyTurn();
+
+        if (!enemyHealth.IsDead)
+        {
+            Debug.Log("El enemigo sigue vivo, empezando su turno");
+            StartEnemyTurn();
+        }
+            
     }
 
     // ====== TURNO ENEMIGO ======
@@ -130,13 +140,17 @@ public class BattleController : MonoBehaviour
 
         if (skill.useMinigame) // ¿Tiene minijuego?
         {
+            playerInput.SwitchCurrentActionMap("Minigame");
+            Debug.Log("Skill con minijuego");
+
             // Llama al minijuego empezando a cero y va sumando
             damage = 0;
-            playerInput.SwitchCurrentActionMap("Minigame");
             attackMinigame.StartMinigame();
         }
         else
         {
+            Debug.Log("Skill sin minijuego");
+
             // Pedir daño directo
             ApplySkillDirect(skill);
             EndPlayerTurn();
@@ -146,8 +160,17 @@ public class BattleController : MonoBehaviour
     // Daño puro y duro
     void ApplySkillDirect(SOSkill skill)
     {
+        Debug.Log("Aplicar daño directo a enemigo");
         enemyHealth.TakeDamage(skill.perfectDamage);
     }
+
+    // Esto es para cuando tiene el MINIGAME ACTIONMAP, porque si no nadie llama a RecieveHit y no funciona
+    public void OnAttack(InputValue value)
+    {
+        if (attackMinigame.gameObject.activeSelf)
+            attackMinigame.RecieveHit();
+    }
+
 
     // ====== MINIJUEGOS ======
 
@@ -158,6 +181,7 @@ public class BattleController : MonoBehaviour
 
     void OnMinigameFinished()
     {
+        Debug.Log("Minijuego terminado");
         enemyHealth.TakeDamage(damage);
         EndPlayerTurn();
     }
