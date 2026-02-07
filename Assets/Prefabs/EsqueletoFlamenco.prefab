@@ -1467,7 +1467,6 @@ GameObject:
   - component: {fileID: 4018869760418904916}
   - component: {fileID: 7000221190772891950}
   - component: {fileID: 9074634647064731902}
-  - component: {fileID: 4260744694176205042}
   - component: {fileID: 707696237989495844}
   - component: {fileID: 6038062409908433539}
   - component: {fileID: 5094681987080718468}
@@ -1549,29 +1548,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &4260744694176205042
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4363482734121951726}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.7
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!195 &707696237989495844
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1606,6 +1582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e858feda0c00e5345be5a9fa9d242193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
+  canPatrol: 1
   patrolRadius: 3
   waitTimeAtPoint: 2
   chaseSpeed: 4.5
@@ -1623,7 +1600,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87911b1967e5fd84fbae8e74e998ddac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombat
-  attackDamage: 8
+  skills:
+  - {fileID: 11400000, guid: b9016a8929ea72a4ab0eb0a037e3f1ac, type: 2}
+  skillProbability: 64000000
+  specialSkill: {fileID: 0}
+  specialEveryTurns: 0
 --- !u!114 &8156433105522485565
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using UnityEngine.AI;
 
 public enum EnemyState
 {
+    Idle,
     Patrol,
     Chase,
     Combat
@@ -15,6 +16,7 @@ public class EnemyAI : MonoBehaviour
 {
     // [!] No quería que fuese por puntos. Quería que lo calculase por su cuenta. POR AHORA debería funcionar
     [Header("Patrulla")]
+    [SerializeField] bool canPatrol = true;
     [SerializeField] private float patrolRadius = 10f;
     [SerializeField] private float waitTimeAtPoint = 2f;
 
@@ -27,7 +29,7 @@ public class EnemyAI : MonoBehaviour
 
     private float waitTimer;
 
-    private EnemyState state = EnemyState.Patrol;
+    private EnemyState state;
 
     // Coger NavMeshAgent automáticamente
     void Awake()
@@ -37,13 +39,24 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        SetPatrol();
+        // Si puede patrullar empieza patrullando
+        if (canPatrol)
+        {
+            state = EnemyState.Patrol;
+            SetPatrol();
+        } else
+        {
+            state = EnemyState.Idle; // Jefes quietos
+        }
+            
     }
 
     void Update()
     {
         switch (state)
         {
+            case EnemyState.Idle:
+                break;
             case EnemyState.Patrol:
                 Patrol();
                 break;

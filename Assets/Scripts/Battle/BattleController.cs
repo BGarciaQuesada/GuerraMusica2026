@@ -8,18 +8,21 @@ public class BattleController : MonoBehaviour
     public PlayerInput playerInput;
 
     [Header("Menus")]
-    public BattleMenu battleMenu;
-    public AttackMenu attackMenu;
-    public PartnerMenu partnerMenu;
+    [SerializeField] private BattleMenu battleMenu;
+    [SerializeField] private AttackMenu attackMenu;
+    [SerializeField] private PartnerMenu partnerMenu;
 
     [Header("Minijuegos")]
-    public AttackMinigame attackMinigame;
-    public RunMinigame runMinigame;
+    [SerializeField] private AttackMinigame attackMinigame;
+    [SerializeField] private RunMinigame runMinigame;
 
     [Header("Datos Enemigo")]
-    EnemyAI currentEnemy; // Solo va a ser 1 por batalla, nada de arrays
-    EnemyHealth enemyHealth;
-    EnemyCombat enemyCombat;
+    [SerializeField] private EnemyAI currentEnemy; // Solo va a ser 1 por batalla, nada de arrays
+    [SerializeField] private EnemyHealth enemyHealth;
+    [SerializeField] private EnemyCombat enemyCombat;
+
+    [Header("Datos Jugador")]
+    [SerializeField] private PlayerHealth playerHealth;
 
     SOSkill currentSkill;
     int damage;
@@ -67,7 +70,7 @@ public class BattleController : MonoBehaviour
         enemyHealth = enemy.GetComponent<EnemyHealth>();
         enemyCombat = enemy.GetComponent<EnemyCombat>();
 
-        enemyHealth.OnDeath += OnEnemyDeath;
+        enemyHealth.OnEnemyDeath += OnEnemyDeath;
 
         StartPlayerTurn();
     }
@@ -103,9 +106,25 @@ public class BattleController : MonoBehaviour
     {
         Debug.Log("Turno enemigo");
 
-        int dmg = enemyCombat.GetAttackDamage();
+        SOSkill skill = enemyCombat.GetNextSkill();
 
-        Debug.Log("Enemigo pega con " + dmg);
+        if (skill == null)
+        {
+            StartPlayerTurn();
+            return;
+        }
+
+        int dmg = skill.perfectDamage;
+
+        Debug.Log("Enemigo usa skill: " + skill.skillName);
+
+        playerHealth.TakeDamage(dmg);
+
+        if (playerHealth.IsDead)
+        {
+            Debug.Log("Jugador muerto, fin batalla");
+            return;
+        }
 
         Invoke(nameof(StartPlayerTurn), 1.2f);
     }

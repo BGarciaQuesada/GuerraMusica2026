@@ -11,7 +11,7 @@ public class EnemyHealth : MonoBehaviour
     // [!] Método flecha no explotes otra vez y entres en bucle grax
     public bool IsDead => pendingDeath;
 
-    public event Action OnDeath;
+    public event Action OnEnemyDeath;
 
     void Awake()
     {
@@ -30,7 +30,7 @@ public class EnemyHealth : MonoBehaviour
             pendingDeath = true; // PONEMOS LA VANDERA DE QUE SE MUERA PORQUE SI SE DESTRUYE AQUÍ TE SACA AL MUNDO CON EL MINIJUEGO
             Debug.Log("Enemigo derrotado (pendiente de finalizar turno)");
 
-            OnDeath?.Invoke();
+            OnEnemyDeath?.Invoke();
         }
     }
 }
