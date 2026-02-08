@@ -11,6 +11,7 @@ public class BattleController : MonoBehaviour
     [SerializeField] private BattleMenu battleMenu;
     [SerializeField] private AttackMenu attackMenu;
     [SerializeField] private PartnerMenu partnerMenu;
+    [SerializeField] private PartnerAttackMenu partnerAttackMenu;
 
     [Header("Minijuegos")]
     [SerializeField] private AttackMinigame attackMinigame;
@@ -23,6 +24,18 @@ public class BattleController : MonoBehaviour
 
     [Header("Datos Jugador")]
     [SerializeField] private PlayerHealth playerHealth;
+
+    [Header("Datos Compañero")]
+    [SerializeField] private PartnerCombat[] partnersAvailable;
+
+    PartnerCombat currentPartner;
+    int currentPartnerIndex = 0;
+
+    // ESTADOS DE TURNOS
+    private bool playerActionFinished;
+    private bool partnerActionFinished;
+    private SOSkill selectedPartnerSkill;
+
 
     SOSkill currentSkill;
     int damage;
@@ -47,15 +60,20 @@ public class BattleController : MonoBehaviour
         battleMenu.OnRun += StartRun;
 
         // Attack menu
-        attackMenu.OnSkillSelected += OnSkillSelected;
+        attackMenu.OnSkillSelected += OnPlayerSkillSelected;
         attackMenu.OnBack += ReturnToBattleMenu;
 
         // Partner menu
+        partnerMenu.OnChangePartner += ChangePartner;
         partnerMenu.OnBack += ReturnToBattleMenu;
+
 
         // Minijuegos
         attackMinigame.OnMinigameHit += OnHit;
         attackMinigame.OnFinishMinigame += OnMinigameFinished;
+
+        // Compañero inicial
+        currentPartner = partnersAvailable[0];
 
         // Debug de Ataque
         // StartAttack();
@@ -90,6 +108,9 @@ public class BattleController : MonoBehaviour
 
         Debug.Log("Turno del jugador, abre battle menu");
 
+        playerActionFinished = false;
+        partnerActionFinished = false;
+
         battleMenu.Open();
         playerInput.SwitchCurrentActionMap("UI"); // No paro de usar ActionMaps, espero que no tenga consecuencias ( ._.)
     }
@@ -100,12 +121,38 @@ public class BattleController : MonoBehaviour
 
         battleMenu.Close();
 
-        if (!enemyHealth.IsDead)
-        {
-            Debug.Log("El enemigo sigue vivo, empezando su turno");
-            StartEnemyTurn();
-        }
+        /*if (!enemyHealth.IsDead)
+        *{
+        *    Debug.Log("El enemigo sigue vivo, empezando su turno");
+        *    StartEnemyTurn();
+        }*/
             
+    }
+
+    // ====== TURNO COMPAÑERO =====
+
+    void StartPartnerTurn()
+    {
+        if (currentPartner == null)
+        {
+            StartEnemyTurn();
+            return;
+        }
+
+        partnerAttackMenu.Open(currentPartner.skills);
+    }
+
+    void OnPartnerSkillSelected(SOSkill skill)
+    {
+        ApplySkillDirect(skill);
+
+        if(!enemyHealth.IsDead)
+            StartEnemyTurn();
+    }
+
+    void ReturnToPlayerTurn()
+    {
+        StartPlayerTurn();
     }
 
     // ====== TURNO ENEMIGO ======
@@ -170,7 +217,7 @@ public class BattleController : MonoBehaviour
 
     // ====== SKILLS ======
 
-    void OnSkillSelected(SOSkill skill)
+    void OnPlayerSkillSelected(SOSkill skill)
     {
         currentSkill = skill;
         attackMenu.Close();

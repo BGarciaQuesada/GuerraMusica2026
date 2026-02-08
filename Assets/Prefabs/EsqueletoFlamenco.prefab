@@ -1557,7 +1557,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 4363482734121951726}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -1566,7 +1566,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1.7
+  m_Height: 0.1
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -1587,7 +1587,7 @@ MonoBehaviour:
   waitTimeAtPoint: 2
   chaseSpeed: 4.5
   patrolSpeed: 2
-  agent: {fileID: 707696237989495844}
+  agent: {fileID: 0}
 --- !u!114 &5094681987080718468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1618,6 +1618,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHP: 30
+  currentHP: 0
+  stunTurnsRemaining: 0
 --- !u!1 &4367598354481789713
 GameObject:
   m_ObjectHideFlags: 0
