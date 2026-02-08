@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8343623c56ea6104480e78965c0982a5, type: 3}
-  m_Name: Guitarrazo
+  m_Name: GritoCigalano
   m_EditorClassIdentifier: Assembly-CSharp::SOSkill
-  skillName: Guitarrazo
-  perfectDamage: 10
-  goodDamage: 10
+  skillName: Grito Cigalano
+  perfectDamage: 0
+  goodDamage: 0
   useMinigame: 0
-  stun: 0
+  stun: 1
+  stunTurns: 1
   buff: 0

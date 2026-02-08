@@ -100,7 +100,11 @@ public class BattleTransitionManager : MonoBehaviour
     void TeleportEnemy(EnemyAI enemy, Transform target)
     {
         NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
-        if (agent) agent.enabled = false;
+        if (agent)
+        {
+            agent.enabled = false;
+            agent.updateRotation = false;
+        }
 
         enemy.transform.SetPositionAndRotation(target.position, target.rotation);
 

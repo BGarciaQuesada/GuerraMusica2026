@@ -71,6 +71,7 @@ public class BattleController : MonoBehaviour
         enemyCombat = enemy.GetComponent<EnemyCombat>();
 
         enemyHealth.OnEnemyDeath += OnEnemyDeath;
+        playerHealth.OnPlayerDeath += OnPlayerDeath;
 
         StartPlayerTurn();
     }
@@ -80,6 +81,13 @@ public class BattleController : MonoBehaviour
     // Los pongo en métodos separados porque es posible que reuse esto sin pasarle nada...
     void StartPlayerTurn()
     {
+        if (playerHealth.ShouldSkipTurn())
+        {
+            Debug.Log("Jugador tiene stun, pierde turno");
+            StartEnemyTurn();
+            return;
+        }
+
         Debug.Log("Turno del jugador, abre battle menu");
 
         battleMenu.Open();
@@ -101,9 +109,16 @@ public class BattleController : MonoBehaviour
     }
 
     // ====== TURNO ENEMIGO ======
-
+    // [!] Tantos returns... La profesora de 1º de DAM me crucificaría. Ahora mismo buscamos funcionalidad, no optimización.
     void StartEnemyTurn()
     {
+        if (enemyHealth.ShouldSkipTurn())
+        {
+            Debug.Log("Enemigo tiene stun, pierde turno");
+            Invoke(nameof(StartPlayerTurn), 1f);
+            return;
+        }
+
         Debug.Log("Turno enemigo");
 
         SOSkill skill = enemyCombat.GetNextSkill();
@@ -118,11 +133,14 @@ public class BattleController : MonoBehaviour
 
         Debug.Log("Enemigo usa skill: " + skill.skillName);
 
+        if (skill.stun)
+            playerHealth.ApplyStun(skill.stunTurns);
+
         playerHealth.TakeDamage(dmg);
 
         if (playerHealth.IsDead)
         {
-            Debug.Log("Jugador muerto, fin batalla");
+            // Debug.Log("Jugador muerto, fin batalla");
             return;
         }
 
@@ -181,6 +199,9 @@ public class BattleController : MonoBehaviour
     {
         Debug.Log("Aplicar daño directo a enemigo");
         enemyHealth.TakeDamage(skill.perfectDamage);
+
+        if (skill.stun)
+            enemyHealth.ApplyStun(skill.stunTurns); //stun no tiene minijuego asi que ea
     }
 
     // Esto es para cuando tiene el MINIGAME ACTIONMAP, porque si no nadie llama a RecieveHit y no funciona
@@ -219,6 +240,15 @@ public class BattleController : MonoBehaviour
         Debug.Log("Fin de batalla");
 
         currentEnemy.Die();
+        BattleTransitionManager.Instance.EndBattle();
+        playerInput.SwitchCurrentActionMap("Player");
+    }
+
+    void OnPlayerDeath()
+    {
+        Debug.Log("Jugador muerto, fin de batalla");
+
+        // Método provisional, esto tendría que llevar a una pantalla de game over
         BattleTransitionManager.Instance.EndBattle();
         playerInput.SwitchCurrentActionMap("Player");
     }

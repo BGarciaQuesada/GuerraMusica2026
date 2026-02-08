@@ -3,9 +3,10 @@ using System;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] int maxHP = 50;
+    [SerializeField] private int maxHP = 50;
+    [SerializeField] private int currentHP;
 
-    int currentHP;
+    [SerializeField] private int stunTurnsRemaining = 0; // Turnos que se queda KO
 
     public bool IsDead => currentHP <= 0;
 
@@ -27,5 +28,20 @@ public class PlayerHealth : MonoBehaviour
             currentHP = 0;
             OnPlayerDeath?.Invoke();
         }
+    }
+
+    // ===== STUN ======
+    public void ApplyStun(int turns)
+    {
+        stunTurnsRemaining += turns;
+    }
+
+    public bool ShouldSkipTurn()
+    {
+        if (stunTurnsRemaining <= 0)
+            return false;
+
+        stunTurnsRemaining--;
+        return true;
     }
 }

@@ -20,6 +20,7 @@ public class SOSkill : ScriptableObject
     [Header("Efectos")]
     public bool useMinigame;    // Si tiene minijuego o no
     public bool stun;
+    public int stunTurns;
     public bool buff;
 
     // Coge el enum HitPrecision del minijuego que es publico y según la situación, tal...

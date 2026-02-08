@@ -1,12 +1,14 @@
 using UnityEngine;
 using System;
+// [!] PlayerHealth y EnemyHealth se parecen demasiado... Espero que esto no signifique que se pueden unificar mejor... Por ahora se queda así
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] int maxHP = 30;
+    [SerializeField] private int maxHP = 30;
+    [SerializeField] private int currentHP;
+    private bool pendingDeath;
 
-    int currentHP;
-    bool pendingDeath;
+    [SerializeField] private int stunTurnsRemaining = 0; // Turnos que se queda KO
 
     // [!] Método flecha no explotes otra vez y entres en bucle grax
     public bool IsDead => pendingDeath;
@@ -32,5 +34,20 @@ public class EnemyHealth : MonoBehaviour
 
             OnEnemyDeath?.Invoke();
         }
+    }
+
+    // ===== STUN ======
+    public void ApplyStun(int turns)
+    {
+        stunTurnsRemaining += turns;
+    }
+
+    public bool ShouldSkipTurn()
+    {
+        if (stunTurnsRemaining <= 0)
+            return false;
+
+        stunTurnsRemaining--;
+        return true;
     }
 }
