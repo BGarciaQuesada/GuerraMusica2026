@@ -40,4 +40,40 @@ public class SOSkill : ScriptableObject
         }
     }
 
+    // Skill con daño y efecto directo
+    public void Apply(PlayerHealth player, EnemyHealth enemy, bool targetEnemy)
+    {
+        int damage = perfectDamage;
+
+        ApplyWithDamage(player, enemy, targetEnemy, damage);
+    }
+
+    // [!] Se ha movido aquí lo que había de skill y direct skill.
+
+    // Skill CON MINIJUEGO
+    public void ApplyWithDamage(
+        PlayerHealth player,
+        EnemyHealth enemy,
+        bool targetEnemy,
+        int damageAmount)
+    {
+        if (targetEnemy)
+        {
+            enemy.TakeDamage(damageAmount);
+
+            if (stun)
+                enemy.ApplyStun(stunTurns);
+        }
+        else
+        {
+            player.TakeDamage(damageAmount);
+
+            if (stun)
+                player.ApplyStun(stunTurns);
+        }
+
+        // if (buff) ApplyBuff(...)
+        // if (heal) ApplyHeal(...)
+    }
+
 }

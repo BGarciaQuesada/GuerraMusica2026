@@ -31,12 +31,6 @@ public class BattleController : MonoBehaviour
     PartnerCombat currentPartner;
     int currentPartnerIndex = 0;
 
-    // ESTADOS DE TURNOS
-    private bool playerActionFinished;
-    private bool partnerActionFinished;
-    private SOSkill selectedPartnerSkill;
-
-
     SOSkill currentSkill;
     int damage;
 
@@ -67,6 +61,9 @@ public class BattleController : MonoBehaviour
         partnerMenu.OnChangePartner += ChangePartner;
         partnerMenu.OnBack += ReturnToBattleMenu;
 
+        // Ataques del compañero
+        partnerAttackMenu.OnPartnerSkillSelected += OnPartnerSkillSelected;
+        partnerAttackMenu.OnBack += ReturnToPlayerTurn;
 
         // Minijuegos
         attackMinigame.OnMinigameHit += OnHit;
@@ -108,9 +105,6 @@ public class BattleController : MonoBehaviour
 
         Debug.Log("Turno del jugador, abre battle menu");
 
-        playerActionFinished = false;
-        partnerActionFinished = false;
-
         battleMenu.Open();
         playerInput.SwitchCurrentActionMap("UI"); // No paro de usar ActionMaps, espero que no tenga consecuencias ( ._.)
     }
@@ -120,6 +114,7 @@ public class BattleController : MonoBehaviour
         Debug.Log("Fin del turno del jugador, cierra battle menu");
 
         battleMenu.Close();
+        StartPartnerTurn();
 
         /*if (!enemyHealth.IsDead)
         *{
@@ -139,24 +134,44 @@ public class BattleController : MonoBehaviour
             return;
         }
 
-        partnerAttackMenu.Open(currentPartner.skills);
+        partnerAttackMenu.Open(currentPartner.GetSkills());
     }
 
     void OnPartnerSkillSelected(SOSkill skill)
     {
-        ApplySkillDirect(skill);
+        partnerAttackMenu.Close();
 
-        if(!enemyHealth.IsDead)
+        ApplySkill(skill, true);
+
+        if (!enemyHealth.IsDead)
             StartEnemyTurn();
     }
 
     void ReturnToPlayerTurn()
     {
+        partnerAttackMenu.Close();
         StartPlayerTurn();
     }
 
+    // ====== CAMBIAR COMPA ======
+
+    void ChangePartner()
+    {
+        currentPartnerIndex++;
+
+        if (currentPartnerIndex >= partnersAvailable.Length)
+            currentPartnerIndex = 0;
+
+        currentPartner = partnersAvailable[currentPartnerIndex];
+
+        Debug.Log("Compañero cambiado a: " + currentPartner.name);
+
+        // cambiar consume turno completo
+        partnerMenu.Close();
+        StartEnemyTurn();
+    }
+
     // ====== TURNO ENEMIGO ======
-    // [!] Tantos returns... La profesora de 1º de DAM me crucificaría. Ahora mismo buscamos funcionalidad, no optimización.
     void StartEnemyTurn()
     {
         if (enemyHealth.ShouldSkipTurn())
@@ -170,28 +185,11 @@ public class BattleController : MonoBehaviour
 
         SOSkill skill = enemyCombat.GetNextSkill();
 
-        if (skill == null)
-        {
-            StartPlayerTurn();
-            return;
-        }
+        if (skill != null)
+            ApplySkill(skill, false);
 
-        int dmg = skill.perfectDamage;
-
-        Debug.Log("Enemigo usa skill: " + skill.skillName);
-
-        if (skill.stun)
-            playerHealth.ApplyStun(skill.stunTurns);
-
-        playerHealth.TakeDamage(dmg);
-
-        if (playerHealth.IsDead)
-        {
-            // Debug.Log("Jugador muerto, fin batalla");
-            return;
-        }
-
-        Invoke(nameof(StartPlayerTurn), 1.2f);
+        if (!playerHealth.IsDead)
+            Invoke(nameof(StartPlayerTurn), 1.2f);
     }
 
     // ====== MENÚS ======
@@ -236,19 +234,14 @@ public class BattleController : MonoBehaviour
             Debug.Log("Skill sin minijuego");
 
             // Pedir daño directo
-            ApplySkillDirect(skill);
+            ApplySkill(skill, true);
             EndPlayerTurn();
         }
     }
 
-    // Daño puro y duro
-    void ApplySkillDirect(SOSkill skill)
+    void ApplySkill(SOSkill skill, bool targetEnemy)
     {
-        Debug.Log("Aplicar daño directo a enemigo");
-        enemyHealth.TakeDamage(skill.perfectDamage);
-
-        if (skill.stun)
-            enemyHealth.ApplyStun(skill.stunTurns); //stun no tiene minijuego asi que ea
+        skill.Apply(playerHealth, enemyHealth, targetEnemy);
     }
 
     // Esto es para cuando tiene el MINIGAME ACTIONMAP, porque si no nadie llama a RecieveHit y no funciona
@@ -269,7 +262,7 @@ public class BattleController : MonoBehaviour
     void OnMinigameFinished()
     {
         Debug.Log("Minijuego terminado");
-        enemyHealth.TakeDamage(damage);
+        ApplySkill(currentSkill, true);
         EndPlayerTurn();
     }
 
