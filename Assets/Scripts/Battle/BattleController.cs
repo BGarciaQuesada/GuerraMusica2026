@@ -29,7 +29,6 @@ public class BattleController : MonoBehaviour
     [SerializeField] private PartnerCombat[] partnersAvailable;
 
     PartnerCombat currentPartner;
-    int currentPartnerIndex = 0;
 
     SOSkill currentSkill;
     int damage;
@@ -155,14 +154,11 @@ public class BattleController : MonoBehaviour
 
     // ====== CAMBIAR COMPA ======
 
-    void ChangePartner()
+    void ChangePartner(PartnerCombat selectedPartner)
     {
-        currentPartnerIndex++;
+        currentPartner = selectedPartner;
 
-        if (currentPartnerIndex >= partnersAvailable.Length)
-            currentPartnerIndex = 0;
-
-        currentPartner = partnersAvailable[currentPartnerIndex];
+        Debug.Log("Nuevo compañero: " + currentPartner.name);
 
         Debug.Log("Compañero cambiado a: " + currentPartner.name);
 

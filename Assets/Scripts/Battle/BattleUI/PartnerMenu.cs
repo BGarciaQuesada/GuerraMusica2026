@@ -5,7 +5,10 @@ using UnityEngine;
 // No confundirse, esta clase engloba todo lo que es CAMBIAR DE COMPAÑERO
 public class PartnerMenu : MonoBehaviour
 {
-    public event Action OnChangePartner;
+    [Header("Compañeros disponibles")]
+    [SerializeField] private PartnerCombat[] partners;
+
+    public event Action<PartnerCombat> OnChangePartner;
     public event Action OnBack;
 
     public void Open() => gameObject.SetActive(true);
@@ -13,7 +16,7 @@ public class PartnerMenu : MonoBehaviour
 
     public void SelectPartner(int index)
     {
-        OnChangePartner?.Invoke();
+        OnChangePartner?.Invoke(partners[index]);
         Close();
     }
 
