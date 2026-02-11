@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class PartnerCombat : MonoBehaviour
 {
+    [Header("Info")]
+    [SerializeField] private string partnerName;
+
     [Header("Skills del compañero")]
     [SerializeField] private SOSkill[] skills;
 
