@@ -1849,7 +1849,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PartnerCombat
   partnerName: "Sergey Rajm\xE1ninov"
   partnerPrefab: {fileID: 2678113285388136703}
-  skills: []
+  skills:
+  - {fileID: 11400000, guid: c15f942c2e46f7047b5d4b86b4548cfd, type: 2}
+  - {fileID: 11400000, guid: 9d7af42fdf81300449867455ca25a150, type: 2}
 --- !u!1 &3412653728445733733
 GameObject:
   m_ObjectHideFlags: 0

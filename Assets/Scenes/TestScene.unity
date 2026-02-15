@@ -1096,6 +1096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartnerVisualHandler
   smokeEffectPrefab: {fileID: 0}
+  currentInstance: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -2400,7 +2401,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19364e26f0502b24495af5bf476a46e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartnerMenu
-  partners: []
+  partners:
+  - {fileID: 1926585203729756459, guid: 18d306fd03ba62c43a6cd88f81a56ded, type: 3}
+  - {fileID: 307669922105108066, guid: dafe080f773c9244db434c055fe1b774, type: 3}
+  - {fileID: 5637935246891225126, guid: d838bb5b8da13fb48beccf8295a58263, type: 3}
 --- !u!114 &721016747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5716,9 +5720,29 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1905437421}
     - target: {fileID: 5134918867689733546, guid: 2766cce8d2d34fd4c93fd54f71b2f4b7, type: 3}
+      propertyPath: partnerSpawnPoint
+      value: 
+      objectReference: {fileID: 323940579}
+    - target: {fileID: 5134918867689733546, guid: 2766cce8d2d34fd4c93fd54f71b2f4b7, type: 3}
       propertyPath: partnerVisualHandler
       value: 
       objectReference: {fileID: 323940580}
+    - target: {fileID: 5134918867689733546, guid: 2766cce8d2d34fd4c93fd54f71b2f4b7, type: 3}
+      propertyPath: partnersAvailable.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5134918867689733546, guid: 2766cce8d2d34fd4c93fd54f71b2f4b7, type: 3}
+      propertyPath: 'partnersAvailable.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1926585203729756459, guid: 18d306fd03ba62c43a6cd88f81a56ded, type: 3}
+    - target: {fileID: 5134918867689733546, guid: 2766cce8d2d34fd4c93fd54f71b2f4b7, type: 3}
+      propertyPath: 'partnersAvailable.Array.data[1]'
+      value: 
+      objectReference: {fileID: 307669922105108066, guid: dafe080f773c9244db434c055fe1b774, type: 3}
+    - target: {fileID: 5134918867689733546, guid: 2766cce8d2d34fd4c93fd54f71b2f4b7, type: 3}
+      propertyPath: 'partnersAvailable.Array.data[2]'
+      value: 
+      objectReference: {fileID: 5637935246891225126, guid: d838bb5b8da13fb48beccf8295a58263, type: 3}
     - target: {fileID: 5606395282876882535, guid: 2766cce8d2d34fd4c93fd54f71b2f4b7, type: 3}
       propertyPath: m_Name
       value: Big Vegas

@@ -104,4 +104,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PartnerCombat
   partnerName: "Lul\xFA"
   partnerPrefab: {fileID: 6977266735795299423}
-  skills: []
+  skills:
+  - {fileID: 11400000, guid: 2922ccfd6d1573b409391252e24c7ea2, type: 2}
+  - {fileID: 11400000, guid: fa4d8b3dba1628d47bfe9e3a88ab37e6, type: 2}

@@ -91,4 +91,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PartnerCombat
   partnerName: Parsifal
   partnerPrefab: {fileID: 3088189415902948597}
-  skills: []
+  skills:
+  - {fileID: 11400000, guid: dea6ba9a248dc74419317860cafd96d2, type: 2}
+  - {fileID: 11400000, guid: 21cfc0374f69d5148b49251d531d2c97, type: 2}

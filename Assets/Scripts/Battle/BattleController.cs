@@ -26,10 +26,11 @@ public class BattleController : MonoBehaviour
     [SerializeField] private PlayerHealth playerHealth;
 
     [Header("Datos Compañero")]
-    [SerializeField] private PartnerVisualHandler partnerVisualHandler;
+    [SerializeField] private Transform partnerSpawnPoint;
     [SerializeField] private PartnerCombat[] partnersAvailable;
 
     PartnerCombat currentPartner;
+    private PartnerCombat currentPartnerInstance;
 
     SOSkill currentSkill;
     int damage;
@@ -89,11 +90,26 @@ public class BattleController : MonoBehaviour
         enemyHealth.OnEnemyDeath += OnEnemyDeath;
         playerHealth.OnPlayerDeath += OnPlayerDeath;
 
-        if (currentPartner != null)
-            partnerVisualHandler.SetPartner(currentPartner);
+        if (partnersAvailable.Length > 0)
+        {
+            currentPartner = partnersAvailable[0];
+            SpawnPartner(currentPartner);
+        }
 
         StartPlayerTurn();
     }
+
+    void SpawnPartner(PartnerCombat partnerPrefab)
+    {
+        if (currentPartnerInstance != null)
+            Destroy(currentPartnerInstance.gameObject);
+
+        currentPartnerInstance = Instantiate(
+            partnerPrefab,
+            partnerSpawnPoint.position,
+            partnerSpawnPoint.rotation);
+    }
+
 
     // ====== TURNO JUGADOR ======
 
@@ -138,7 +154,7 @@ public class BattleController : MonoBehaviour
             return;
         }
 
-        partnerAttackMenu.Open(currentPartner.GetSkills());
+        partnerAttackMenu.Open(currentPartnerInstance.GetSkills());
     }
 
     void OnPartnerSkillSelected(SOSkill skill)
@@ -162,7 +178,7 @@ public class BattleController : MonoBehaviour
     void ChangePartner(PartnerCombat selectedPartner)
     {
         currentPartner = selectedPartner;
-        partnerVisualHandler.SetPartner(currentPartner);
+        SpawnPartner(currentPartner);
 
         Debug.Log("Compañero cambiado a: " + currentPartner.name);
 
