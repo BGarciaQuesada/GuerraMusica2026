@@ -17,11 +17,27 @@ public class SOSkill : ScriptableObject
     public int perfectDamage = 20;
     public int goodDamage = 10;
 
-    [Header("Efectos")]
-    public bool useMinigame;    // Si tiene minijuego o no
+    [Header("Curación")]
+    public bool heal;
+    public int healAmount;
+
+    [Header("Buff")]
+    public bool buff;
+    public int buffAmount;
+    public int buffTurns;
+
+    [Header("Debuff")]
+    public bool debuff;
+    public int debuffAmount;
+    public int debuffTurns;
+
+    [Header("Stun")]
     public bool stun;
     public int stunTurns;
-    public bool buff;
+
+    [Header("Otros")]
+    public bool useMinigame;    // Si tiene minijuego o no
+    
 
     // Coge el enum HitPrecision del minijuego que es publico y según la situación, tal...
     public int GetDamage(HitPrecision precision)
@@ -43,9 +59,7 @@ public class SOSkill : ScriptableObject
     // Skill con daño y efecto directo
     public void Apply(PlayerHealth player, EnemyHealth enemy, bool targetEnemy)
     {
-        int damage = perfectDamage;
-
-        ApplyWithDamage(player, enemy, targetEnemy, damage);
+        ApplyWithDamage(player, enemy, targetEnemy, perfectDamage);
     }
 
     // [!] Se ha movido aquí lo que había de skill y direct skill.
@@ -59,21 +73,29 @@ public class SOSkill : ScriptableObject
     {
         if (targetEnemy)
         {
-            enemy.TakeDamage(damageAmount);
+            int finalDamage = enemy.GetModifiedDamage(damageAmount); // Considerar buff/debuff...
+            enemy.TakeDamage(finalDamage);
 
             if (stun)
                 enemy.ApplyStun(stunTurns);
+
+            if (debuff)
+                enemy.ApplyDamageModifier(-debuffAmount, debuffTurns);
         }
         else
         {
-            player.TakeDamage(damageAmount);
+            int finalDamage = player.GetModifiedDamage(damageAmount);
+            player.TakeDamage(finalDamage);
 
             if (stun)
                 player.ApplyStun(stunTurns);
-        }
 
-        // if (buff) ApplyBuff(...)
-        // if (heal) ApplyHeal(...)
+            if (buff)
+                player.ApplyDamageModifier(buffAmount, buffTurns);
+
+            if (heal)
+                player.Heal(healAmount);
+        }
     }
 
 }

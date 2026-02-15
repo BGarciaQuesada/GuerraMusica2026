@@ -26,6 +26,7 @@ public class BattleController : MonoBehaviour
     [SerializeField] private PlayerHealth playerHealth;
 
     [Header("Datos Compañero")]
+    [SerializeField] private PartnerVisualHandler partnerVisualHandler;
     [SerializeField] private PartnerCombat[] partnersAvailable;
 
     PartnerCombat currentPartner;
@@ -69,7 +70,8 @@ public class BattleController : MonoBehaviour
         attackMinigame.OnFinishMinigame += OnMinigameFinished;
 
         // Compañero inicial
-        currentPartner = partnersAvailable[0];
+        if (partnersAvailable.Length > 0)
+            currentPartner = partnersAvailable[0];
 
         // Debug de Ataque
         // StartAttack();
@@ -86,6 +88,9 @@ public class BattleController : MonoBehaviour
 
         enemyHealth.OnEnemyDeath += OnEnemyDeath;
         playerHealth.OnPlayerDeath += OnPlayerDeath;
+
+        if (currentPartner != null)
+            partnerVisualHandler.SetPartner(currentPartner);
 
         StartPlayerTurn();
     }
@@ -157,8 +162,7 @@ public class BattleController : MonoBehaviour
     void ChangePartner(PartnerCombat selectedPartner)
     {
         currentPartner = selectedPartner;
-
-        Debug.Log("Nuevo compañero: " + currentPartner.name);
+        partnerVisualHandler.SetPartner(currentPartner);
 
         Debug.Log("Compañero cambiado a: " + currentPartner.name);
 
@@ -184,8 +188,13 @@ public class BattleController : MonoBehaviour
         if (skill != null)
             ApplySkill(skill, false);
 
-        if (!playerHealth.IsDead)
+        if (!playerHealth.IsDead){
+            playerHealth.TickModifier();
+            enemyHealth.TickModifier();
+
             Invoke(nameof(StartPlayerTurn), 1.2f);
+        }
+            
     }
 
     // ====== MENÚS ======
@@ -258,7 +267,7 @@ public class BattleController : MonoBehaviour
     void OnMinigameFinished()
     {
         Debug.Log("Minijuego terminado");
-        ApplySkill(currentSkill, true);
+        currentSkill.ApplyWithDamage(playerHealth, enemyHealth, true, damage);
         EndPlayerTurn();
     }
 

@@ -4,6 +4,7 @@ public class PartnerCombat : MonoBehaviour
 {
     [Header("Info")]
     [SerializeField] private string partnerName;
+    [SerializeField] private GameObject partnerPrefab;
 
     [Header("Skills del compañero")]
     [SerializeField] private SOSkill[] skills;
@@ -12,5 +13,10 @@ public class PartnerCombat : MonoBehaviour
     public SOSkill[] GetSkills()
     {
         return skills;
+    }
+
+    public GameObject GetPartnerPrefab()
+    {
+        return partnerPrefab;
     }
 }
