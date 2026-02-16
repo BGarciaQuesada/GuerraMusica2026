@@ -154,7 +154,8 @@ public class BattleController : MonoBehaviour
             return;
         }
 
-        partnerAttackMenu.Open(currentPartnerInstance.GetSkills());
+        if (!enemyHealth.IsDead)
+            partnerAttackMenu.Open(currentPartnerInstance.GetSkills());
     }
 
     void OnPartnerSkillSelected(SOSkill skill)
