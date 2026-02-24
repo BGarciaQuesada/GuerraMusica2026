@@ -10,10 +10,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     public float walkSpeed = 2f;
-    public float runSpeed = 4f;
+    public float runSpeed = 6f;
     public float acceleration = 10f;
     public float gravity = -9.81f;
-    public float jumpHeight = 1.5f;
+    // public float jumpHeight = 1.5f;
 
     [Header("Ground Check")]
     public Transform groundCheck;           // Un objeto vacío a los pies que sirve para comprobar si el personaje está en el suelo.
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
         isWalking = value.isPressed;
     }
 
-    public void OnJump(InputValue value)
+    /*public void OnJump(InputValue value)
     {
         if (!value.isPressed) return;
 
@@ -106,5 +106,5 @@ public class PlayerController : MonoBehaviour
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-    }
+    }*/
 }
