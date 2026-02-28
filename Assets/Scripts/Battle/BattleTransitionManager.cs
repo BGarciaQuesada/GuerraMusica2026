@@ -14,6 +14,10 @@ public class BattleTransitionManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] BattleTransitionUI transitionUI;
 
+    [Header("Camera Change")]
+    [SerializeField] Camera worldCamera;
+    [SerializeField] Camera battleCamera;
+
     Vector3 playerWorldPosition;
     Quaternion playerWorldRotation;
 
@@ -47,9 +51,21 @@ public class BattleTransitionManager : MonoBehaviour
     {
         Time.timeScale = 0f;
 
-        yield return transitionUI.PlayTransition();
+        // Tapar pantalla
+        yield return transitionUI.PlayEnter();
 
+        // tp
         TeleportToBattle();
+
+        // Cambiar a cámara de Battle Plane
+        worldCamera.gameObject.SetActive(false);
+        battleCamera.gameObject.SetActive(true);
+
+        // Esperar un poco (para apreciar la transición, se puede quitar si eso)
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        // Destapar pantalla
+        yield return transitionUI.PlayExit();
 
         Time.timeScale = 1f;
 
@@ -72,9 +88,21 @@ public class BattleTransitionManager : MonoBehaviour
     {
         Time.timeScale = 0f;
 
-        yield return transitionUI.PlayTransition();
+        // Tapar pantalla
+        yield return transitionUI.PlayEnter();
 
+        // tp
         TeleportPlayer(currentPlayer, playerWorldPosition, playerWorldRotation);
+
+        // Cambiara a cámara del jugador
+        battleCamera.gameObject.SetActive(false);
+        worldCamera.gameObject.SetActive(true);
+
+        // Esperar un poco (para apreciar la transición, se puede quitar si eso)
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        // Destapar pantalla
+        yield return transitionUI.PlayExit();
 
         Time.timeScale = 1f;
     }

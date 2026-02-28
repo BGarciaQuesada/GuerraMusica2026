@@ -22,15 +22,16 @@ public class BattleTransitionUI : MonoBehaviour
         transitionImage.anchoredPosition = leftOutside;
     }
 
-    public IEnumerator PlayTransition()
+    // Se ha partido el método de PlayTransition en dos para poder esperar a que los personajes estén en el plano de batalla
+    public IEnumerator PlayEnter()
     {
-        // Entrar
+        // Slide in (cubre pantalla)
         yield return Move(transitionImage, leftOutside, center);
+    }
 
-        // Espera mientras se teletransporta
-        yield return new WaitForSecondsRealtime(0.3f);
-
-        // Salir
+    public IEnumerator PlayExit()
+    {
+        // Slide out
         yield return Move(transitionImage, center, rightOutside);
     }
 
