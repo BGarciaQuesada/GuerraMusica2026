@@ -18,7 +18,7 @@ public class EnemyAI : MonoBehaviour
     [Header("Patrulla")]
     [SerializeField] bool canPatrol = true;
     [SerializeField] private float patrolRadius = 10f;
-    [SerializeField] private float waitTimeAtPoint = 2f;
+    [SerializeField] private float waitTimeAtPoint = 4f;
 
     [Header("Chase")]
     [SerializeField] private float chaseSpeed = 4.5f;
@@ -124,9 +124,9 @@ public class EnemyAI : MonoBehaviour
 
     #region Combat Initiation
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.CompareTag("Player"))
+        if (other.collider.CompareTag("Player"))
         {
             Debug.Log("Comenzar combate");
             StartCombat();

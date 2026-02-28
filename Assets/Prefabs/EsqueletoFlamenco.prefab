@@ -1619,6 +1619,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHP: 30
   currentHP: 0
+  damageModifier: 0
+  modifierTurns: 0
   stunTurnsRemaining: 0
 --- !u!1 &4367598354481789713
 GameObject:
