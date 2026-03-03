@@ -14,7 +14,7 @@ public enum EnemyState
 
 public class EnemyAI : MonoBehaviour
 {
-    // [!] No quería que fuese por puntos. Quería que lo calculase por su cuenta. POR AHORA debería funcionar
+    // [!] No querÃ­a que fuese por puntos. QuerÃ­a que lo calculase por su cuenta. POR AHORA deberÃ­a funcionar
     [Header("Patrulla")]
     [SerializeField] bool canPatrol = true;
     [SerializeField] private float patrolRadius = 10f;
@@ -31,7 +31,7 @@ public class EnemyAI : MonoBehaviour
 
     private EnemyState state;
 
-    // Coger NavMeshAgent automáticamente
+    // Coger NavMeshAgent automÃ¡ticamente
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -74,13 +74,13 @@ public class EnemyAI : MonoBehaviour
     #region Patrol
     void Patrol()
     {
-        // Si no sabe a dónde ir, llamar a punto (inicio)
+        // Si no sabe a dï¿½nde ir, llamar a punto (inicio)
         if (!agent.hasPath)
             SetPatrol();
 
         if (!agent.pathPending && agent.remainingDistance < 0.3f)
         {
-            // Se espera a dónde ir y vuelve a llamar a recibir punto
+            // Se espera a dï¿½nde ir y vuelve a llamar a recibir punto
             waitTimer += Time.deltaTime;
             if (waitTimer >= waitTimeAtPoint)
             {
@@ -95,7 +95,7 @@ public class EnemyAI : MonoBehaviour
         agent.speed = patrolSpeed;
 
         // [!] Esto era antes el TryGetRandomPatrolPoint(). Lo he combinado en uno.
-        // Calcula una posición dentro del radio de patrulla
+        // Calcula una posiciï¿½n dentro del radio de patrulla
         Vector3 random = transform.position + Random.insideUnitSphere * patrolRadius;
 
         // Intenta buscar ese punto en el NavMesh, si lo encuentra, lo pone como destino

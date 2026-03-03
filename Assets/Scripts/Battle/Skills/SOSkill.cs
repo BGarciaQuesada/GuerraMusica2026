@@ -7,17 +7,17 @@ using UnityEngine;
  * Resumen: es una plantilla
  */
 
-// Esto de aquí es para que salga en el menú de Unity al hacer clic derecho y no estar media hora copiando y pegando
+// Esto de aquÃ­ es para que salga en el menÃº de Unity al hacer clic derecho y no estar media hora copiando y pegando
 [CreateAssetMenu(fileName = "SOSkill", menuName = "Scriptable Objects/SOSkill")]
 public class SOSkill : ScriptableObject
 {
     public string skillName;
 
-    [Header("Daño")]
+    [Header("DaÃ±o")]
     public int perfectDamage = 20;
     public int goodDamage = 10;
 
-    [Header("Curación")]
+    [Header("CuraciÃ³n")]
     public bool heal;
     public int healAmount;
 
@@ -39,7 +39,7 @@ public class SOSkill : ScriptableObject
     public bool useMinigame;    // Si tiene minijuego o no
     
 
-    // Coge el enum HitPrecision del minijuego que es publico y según la situación, tal...
+    // Coge el enum HitPrecision del minijuego que es publico y segï¿½n la situaciÃ³n, tal...
     public int GetDamage(HitPrecision precision)
     {
         switch (precision)
@@ -56,13 +56,13 @@ public class SOSkill : ScriptableObject
         }
     }
 
-    // Skill con daño y efecto directo
+    // Skill con daÃ±o y efecto directo
     public void Apply(PlayerHealth player, EnemyHealth enemy, bool targetEnemy)
     {
         ApplyWithDamage(player, enemy, targetEnemy, perfectDamage);
     }
 
-    // [!] Se ha movido aquí lo que había de skill y direct skill.
+    // [!] Se ha movido aquÃ­ lo que habÃ­a de skill y direct skill.
 
     // Skill CON MINIJUEGO
     public void ApplyWithDamage(
