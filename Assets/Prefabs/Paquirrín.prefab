@@ -152,6 +152,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 29e15f7edb0961b45b4b2670954c27d4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 157377264236716427}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 29e15f7edb0961b45b4b2670954c27d4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 100279249894383289}
   m_SourcePrefab: {fileID: 100100000, guid: 29e15f7edb0961b45b4b2670954c27d4, type: 3}
 --- !u!4 &2646731925655294843 stripped
 Transform:
@@ -264,3 +267,26 @@ MonoBehaviour:
   damageModifier: 0
   modifierTurns: 0
   stunTurnsRemaining: 0
+--- !u!136 &100279249894383289
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3454476441271323073}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
