@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Esta clase tendrá las stats del enemigo. Ahora mismo solo hay daño. El plan es que aquí haya métodos según el tipo de enemigo y que los llame.
+// Esta clase tendrÃ¡ las stats del enemigo. Ahora mismo solo hay daÃ±o. El plan es que aquÃ­ haya mÃ©todos segÃºn el tipo de enemigo y que los llame.
 public class EnemyCombat : MonoBehaviour
 {
     [Header("Skills del enemigo")]
@@ -20,7 +20,7 @@ public class EnemyCombat : MonoBehaviour
         turnCounter++;
 
         // SI HA LLEGADO EL TURNO, forzar skill especial
-        // Si no tiene skill special, la primera condición lo echa
+        // Si no tiene skill special, la primera condiciÃ³n lo echa
         if (specialEveryTurns > 0 && turnCounter % specialEveryTurns == 0)
         {
             return specialSkill;
@@ -41,10 +41,10 @@ public class EnemyCombat : MonoBehaviour
         foreach (int probabilityValue in skillProbability)
             totalProbability += probabilityValue;
 
-        // Saca número dentro del rango
+        // Saca nÃºmero dentro del rango
         int roll = Random.Range(0, totalProbability);
 
-        // Recorrer skills hasta llegar al número rolleado
+        // Recorrer skills hasta llegar al nï¿½mero rolleado
         int accumulatedProbability = 0;
 
         for (int i = 0; i < skills.Length; i++)
@@ -54,7 +54,7 @@ public class EnemyCombat : MonoBehaviour
                 return skills[i];
         }
 
-        // No se ha encontrado, usar 1ª (no se debería llegar aquí de normales)
+        // No se ha encontrado, usar 1Âº (no se deberÃ­a llegar aquÃ­ de normales)
         return skills[0];
     }
 }

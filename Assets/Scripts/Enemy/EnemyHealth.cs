@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-// [!] PlayerHealth y EnemyHealth se parecen demasiado... Espero que esto no signifique que se pueden unificar mejor... Por ahora se queda así
+// [!] PlayerHealth y EnemyHealth se parecen demasiado... Espero que esto no signifique que se pueden unificar mejor... Por ahora se queda asÃ­
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] private int stunTurnsRemaining = 0; // Turnos que se queda KO
 
-    // [!] Método flecha no explotes otra vez y entres en bucle grax
+    // [!] MÃ©todo flecha no explotes otra vez y entres en bucle grax
     public bool IsDead => pendingDeath;
 
     public event Action OnEnemyDeath;
@@ -32,7 +32,7 @@ public class EnemyHealth : MonoBehaviour
         if (currentHP <= 0)
         {
             currentHP = 0;
-            pendingDeath = true; // PONEMOS LA VANDERA DE QUE SE MUERA PORQUE SI SE DESTRUYE AQUÍ TE SACA AL MUNDO CON EL MINIJUEGO
+            pendingDeath = true; // PONEMOS LA VANDERA DE QUE SE MUERA PORQUE SI SE DESTRUYE AQUÃ TE SACA AL MUNDO CON EL MINIJUEGO
             Debug.Log("Enemigo derrotado (pendiente de finalizar turno)");
 
             OnEnemyDeath?.Invoke();
