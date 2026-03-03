@@ -16,4 +16,9 @@ public class EnemyDetection : MonoBehaviour
             enemy.OnPlayerDetected(other.transform);
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        enemy.OnPlayerLost();
+    }
 }

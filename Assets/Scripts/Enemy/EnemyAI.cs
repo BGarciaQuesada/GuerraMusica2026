@@ -53,6 +53,7 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
+        // Debug.Log($"Estado actual: {state}");
         switch (state)
         {
             case EnemyState.Idle:
@@ -120,6 +121,14 @@ public class EnemyAI : MonoBehaviour
         state = EnemyState.Chase;
         agent.speed = chaseSpeed;
     }
+
+    public void OnPlayerLost()
+    {
+        if (state == EnemyState.Combat) return;
+        state = EnemyState.Patrol;
+        agent.speed = patrolSpeed;
+        SetPatrol();
+    }
     #endregion
 
     #region Combat Initiation
@@ -136,9 +145,12 @@ public class EnemyAI : MonoBehaviour
     void StartCombat()
     {
         if (state == EnemyState.Combat) return;
-
+        
         state = EnemyState.Combat;
-        // agent.isStopped = true;
+        agent.isStopped = true;
+
+        Rigidbody rb = rb = GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezeAll; // Congela al enemigo para que no se mueva durante el combate
 
         Debug.Log("Combate iniciado");
 
