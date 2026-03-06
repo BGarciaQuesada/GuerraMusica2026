@@ -6,6 +6,10 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int maxHP = 50;
     private int currentHP;
 
+    // Getters de salud
+    public int MaxHP => maxHP;
+    public int CurrentHP => currentHP;
+
     [SerializeField] private int damageModifier = 0;
     [SerializeField] private int modifierTurns = 0;
     

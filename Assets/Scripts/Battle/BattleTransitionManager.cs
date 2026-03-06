@@ -13,6 +13,7 @@ public class BattleTransitionManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] BattleTransitionUI transitionUI;
+    [SerializeField] GameObject battleUI;
 
     [Header("Camera Change")]
     [SerializeField] Camera worldCamera;
@@ -61,6 +62,9 @@ public class BattleTransitionManager : MonoBehaviour
         worldCamera.gameObject.SetActive(false);
         battleCamera.gameObject.SetActive(true);
 
+        // Mostrar UI de batalla
+        battleUI.SetActive(true);
+
         // Esperar un poco (para apreciar la transición, se puede quitar si eso)
         yield return new WaitForSecondsRealtime(0.5f);
 
@@ -97,6 +101,9 @@ public class BattleTransitionManager : MonoBehaviour
         // Cambiara a cámara del jugador
         battleCamera.gameObject.SetActive(false);
         worldCamera.gameObject.SetActive(true);
+
+        // Ocultar UI de batalla
+        battleUI.SetActive(false);
 
         // Esperar un poco (para apreciar la transición, se puede quitar si eso)
         yield return new WaitForSecondsRealtime(0.5f);

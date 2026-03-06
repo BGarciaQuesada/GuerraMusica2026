@@ -29,6 +29,10 @@ public class BattleController : MonoBehaviour
     [SerializeField] private Transform partnerSpawnPoint;
     [SerializeField] private PartnerCombat[] partnersAvailable;
 
+    [Header("UI")]
+    [SerializeField] EnemyHealthUI enemyHealthUI;
+
+
     PartnerCombat currentPartner;
     private PartnerCombat currentPartnerInstance;
 
@@ -89,6 +93,9 @@ public class BattleController : MonoBehaviour
 
         enemyHealth.OnEnemyDeath += OnEnemyDeath;
         playerHealth.OnPlayerDeath += OnPlayerDeath;
+
+        // Poner la salud del enemigo actual en la barra de vida enemiga
+        enemyHealthUI.Initialize(enemyHealth);
 
         if (partnersAvailable.Length > 0)
         {
