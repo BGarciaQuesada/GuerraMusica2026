@@ -135,11 +135,20 @@ public class EnemyAI : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        // [!] Esto es para iniciar el combate al chocar con el jugador.
+        // [!] Usado para enemigos normales, los jefes tienen que entrar en la zona de combate, no chocar con el jugador.
         if (other.collider.CompareTag("Player"))
         {
             Debug.Log("Comenzar combate");
             StartCombat();
         }
+    }
+
+    // [!] Llamado por BossBattleTrigger para iniciar el combate al entrar en la zona del jefe (combat requiere player)
+    public void StartBossCombat(Transform playerTransform)
+    {
+        player = playerTransform;
+        StartCombat();
     }
 
     void StartCombat()
