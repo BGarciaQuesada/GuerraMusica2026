@@ -9,9 +9,6 @@ public enum EnemyState
     Combat
 }
 
-// Dejemos de olvidarnos grax
-[RequireComponent(typeof(NavMeshAgent))]
-
 public class EnemyAI : MonoBehaviour
 {
     // [!] No quería que fuese por puntos. Quería que lo calculase por su cuenta. POR AHORA debería funcionar
@@ -34,7 +31,8 @@ public class EnemyAI : MonoBehaviour
     // Coger NavMeshAgent automáticamente
     void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+        if (agent == null)
+            agent = GetComponent<NavMeshAgent>();
     }
 
     void Start()
@@ -159,7 +157,7 @@ public class EnemyAI : MonoBehaviour
         agent.isStopped = true;
 
         Rigidbody rb = rb = GetComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.FreezeAll; // Congela al enemigo para que no se mueva durante el combate
+        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
 
         Debug.Log("Combate iniciado");
 

@@ -141,7 +141,9 @@ public class BattleTransitionManager : MonoBehaviour
             agent.updateRotation = false;
         }
 
-        enemy.transform.SetPositionAndRotation(target.position, target.rotation);
+        Vector3 newRotation = new Vector3(enemy.transform.eulerAngles.x, target.eulerAngles.y, target.eulerAngles.z);
+        Debug.Log($"Teleporting enemy to {target.position} with rotation {newRotation}");
+        enemy.transform.SetPositionAndRotation(target.position, Quaternion.Euler(newRotation));
 
         if (agent) agent.enabled = true;
     }
