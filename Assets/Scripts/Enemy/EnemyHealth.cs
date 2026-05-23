@@ -4,15 +4,18 @@ using System;
 
 public class EnemyHealth : MonoBehaviour
 {
+
+    public GameObject auxAssigns;
+
     [SerializeField] private int maxHP = 30;
-    [SerializeField] private int currentHP;
+    public int currentHP;
 
     // Getters de salud
     public int MaxHP => maxHP;
     public int CurrentHP => currentHP;
 
-    [SerializeField] private int damageModifier = 0;
-    [SerializeField] private int modifierTurns = 0;
+    public int damageModifier = 0;
+    public int modifierTurns = 0;
     private bool pendingDeath;
 
     [SerializeField] private int stunTurnsRemaining = 0; // Turnos que se queda KO
@@ -24,6 +27,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Awake()
     {
+        auxAssigns = GameObject.FindWithTag("AuxAssigns");
         currentHP = maxHP;
     }
 
@@ -36,7 +40,7 @@ public class EnemyHealth : MonoBehaviour
         if (currentHP <= 0)
         {
             currentHP = 0;
-            pendingDeath = true; // PONEMOS LA VANDERA DE QUE SE MUERA PORQUE SI SE DESTRUYE AQUÍ TE SACA AL MUNDO CON EL MINIJUEGO
+            pendingDeath = true; // PONEMOS LA BANDERA DE QUE SE MUERA PORQUE SI SE DESTRUYE AQUÍ TE SACA AL MUNDO CON EL MINIJUEGO
             Debug.Log("Enemigo derrotado (pendiente de finalizar turno)");
 
             OnEnemyDeath?.Invoke();
@@ -61,8 +65,8 @@ public class EnemyHealth : MonoBehaviour
     // ====== BUFF/DEBUFF ======
     public void ApplyDamageModifier(int amount, int turns)
     {
-        damageModifier = amount;
-        modifierTurns = turns;
+        damageModifier = auxAssigns.GetComponent<AuxiliarAssigns>().botónAtaquePartner.GetComponent<SkillsPatch>().totalBuffs;
+        modifierTurns = auxAssigns.GetComponent<AuxiliarAssigns>().botónAtaquePartner.GetComponent<SkillsPatch>().totalTurns;
     }
 
     public int GetModifiedDamage(int baseDamage)

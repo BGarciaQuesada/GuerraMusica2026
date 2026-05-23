@@ -19,7 +19,7 @@ MonoBehaviour:
   healAmount: 0
   buff: 1
   buffAmount: 15
-  buffTurns: 0
+  buffTurns: 1
   debuff: 0
   debuffAmount: 0
   debuffTurns: 0

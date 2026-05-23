@@ -13,7 +13,16 @@ MonoBehaviour:
   m_Name: LeitmotivsWagnerianos
   m_EditorClassIdentifier: Assembly-CSharp::SOSkill
   skillName: Leitmotivs wagnerianos
-  perfectDamage: 20
+  perfectDamage: 15
   goodDamage: 10
-  stun: 0
+  heal: 0
+  healAmount: 0
   buff: 1
+  buffAmount: 0
+  buffTurns: 0
+  debuff: 0
+  debuffAmount: 0
+  debuffTurns: 0
+  stun: 0
+  stunTurns: 0
+  useMinigame: 0

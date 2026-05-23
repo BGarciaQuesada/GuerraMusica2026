@@ -21,8 +21,8 @@ MonoBehaviour:
   buffAmount: 0
   buffTurns: 0
   debuff: 1
-  debuffAmount: 30
-  debuffTurns: 0
+  debuffAmount: -30
+  debuffTurns: 2
   stun: 0
   stunTurns: 0
   useMinigame: 0

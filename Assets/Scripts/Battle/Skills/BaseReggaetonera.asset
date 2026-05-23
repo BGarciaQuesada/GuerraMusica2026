@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BaseReggaetonera
   m_EditorClassIdentifier: Assembly-CSharp::SOSkill
   skillName: Base Reggaetonera
-  perfectDamage: 30
-  goodDamage: 30
+  perfectDamage: 5
+  goodDamage: 5
   heal: 0
   healAmount: 0
   buff: 0

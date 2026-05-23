@@ -22,7 +22,7 @@ public class BattleTransitionUI : MonoBehaviour
         transitionImage.anchoredPosition = leftOutside;
     }
 
-    // Se ha partido el método de PlayTransition en dos para poder esperar a que los personajes estén en el plano de batalla
+    // Se ha partido el mï¿½todo de PlayTransition en dos para poder esperar a que los personajes estï¿½n en el plano de batalla
     public IEnumerator PlayEnter()
     {
         // Slide in (cubre pantalla)

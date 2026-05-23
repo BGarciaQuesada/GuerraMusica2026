@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,6 +12,7 @@ public enum EnemyState
 
 public class EnemyAI : MonoBehaviour
 {
+    private GameObject battleTransitionManager;
     // [!] No quería que fuese por puntos. Quería que lo calculase por su cuenta. POR AHORA debería funcionar
     [Header("Patrulla")]
     [SerializeField] bool canPatrol = true;
@@ -21,16 +23,22 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float chaseSpeed = 4.5f;
     [SerializeField] private float patrolSpeed = 2f;
 
-    [SerializeField] NavMeshAgent agent;
+    public NavMeshAgent agent;
     private Transform player;
 
     private float waitTimer;
 
-    private EnemyState state;
+    public EnemyState state;
+
+    public Vector3 enemyPos;
+
+    public GameObject auxAssigns;
 
     // Coger NavMeshAgent automáticamente
     void Awake()
     {
+        auxAssigns = GameObject.FindWithTag("AuxAssigns");
+        battleTransitionManager = GameObject.FindWithTag("GameManager");
         if (agent == null)
             agent = GetComponent<NavMeshAgent>();
     }
@@ -51,6 +59,15 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
+        if(state == EnemyState.Combat && transform.localPosition.y <= 0)
+        {
+            this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, 0, this.gameObject.transform.localPosition.z);
+        }
+        else
+        {
+            this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        }
         // Debug.Log($"Estado actual: {state}");
         switch (state)
         {
@@ -66,12 +83,13 @@ public class EnemyAI : MonoBehaviour
 
             case EnemyState.Combat:
                 // agent.isStopped = true;
+                
                 break;
         }
     }
 
     #region Patrol
-    void Patrol()
+    public void Patrol()
     {
         // Si no sabe a d�nde ir, llamar a punto (inicio)
         if (!agent.hasPath)
@@ -95,7 +113,7 @@ public class EnemyAI : MonoBehaviour
 
         // [!] Esto era antes el TryGetRandomPatrolPoint(). Lo he combinado en uno.
         // Calcula una posici�n dentro del radio de patrulla
-        Vector3 random = transform.position + Random.insideUnitSphere * patrolRadius;
+        Vector3 random = transform.position + UnityEngine.Random.insideUnitSphere * patrolRadius;
 
         // Intenta buscar ese punto en el NavMesh, si lo encuentra, lo pone como destino
         if (NavMesh.SamplePosition(random, out NavMeshHit hit, patrolRadius, NavMesh.AllAreas))
@@ -137,20 +155,23 @@ public class EnemyAI : MonoBehaviour
         // [!] Usado para enemigos normales, los jefes tienen que entrar en la zona de combate, no chocar con el jugador.
         if (other.collider.CompareTag("Player"))
         {
+            auxAssigns.GetComponent<AuxiliarAssigns>().battleMenuObj.transform.GetChild(2).gameObject.SetActive(true);
             Debug.Log("Comenzar combate");
             StartCombat();
+
         }
     }
 
     // [!] Llamado por BossBattleTrigger para iniciar el combate al entrar en la zona del jefe (combat requiere player)
     public void StartBossCombat(Transform playerTransform)
-    {
+    {   
         player = playerTransform;
         StartCombat();
     }
 
     void StartCombat()
     {
+        enemyPos = new Vector3(this.gameObject.transform.position.x, 0, this.gameObject.transform.position.z);
         if (state == EnemyState.Combat) return;
         
         state = EnemyState.Combat;
@@ -162,7 +183,7 @@ public class EnemyAI : MonoBehaviour
         Debug.Log("Combate iniciado");
 
         // Llamar a que inicie el combate
-        BattleTransitionManager.Instance.StartBattleTransition(
+        battleTransitionManager.GetComponent<BattleTransitionManager>().StartBattleTransition(
             player,
             this
         );

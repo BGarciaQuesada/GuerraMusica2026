@@ -1,9 +1,12 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class BattleController : MonoBehaviour
 {
+
+    public GameObject auxAssigns;
+
+    public GameObject battleTransitionManager;
     public static BattleController Instance;
     public PlayerInput playerInput;
 
@@ -18,14 +21,14 @@ public class BattleController : MonoBehaviour
     [SerializeField] private RunMinigame runMinigame;
 
     [Header("Datos Enemigo")]
-    [SerializeField] private EnemyAI currentEnemy; // Solo va a ser 1 por batalla, nada de arrays
-    [SerializeField] private EnemyHealth enemyHealth;
+    public EnemyAI currentEnemy; // Solo va a ser 1 por batalla, nada de arrays
+    public EnemyHealth enemyHealth;
     [SerializeField] private EnemyCombat enemyCombat;
 
     [Header("Datos Jugador")]
     [SerializeField] private PlayerHealth playerHealth;
 
-    [Header("Datos Compañero")]
+    [Header("Datos Compaï¿½ero")]
     [SerializeField] private Transform partnerSpawnPoint;
     [SerializeField] private PartnerCombat[] partnersAvailable;
 
@@ -33,15 +36,20 @@ public class BattleController : MonoBehaviour
     [SerializeField] EnemyHealthUI enemyHealthUI;
 
 
-    PartnerCombat currentPartner;
+    public PartnerCombat currentPartner;
     private PartnerCombat currentPartnerInstance;
 
     SOSkill currentSkill;
     int damage;
 
-    // Singleton (Esto hace actualmente que Big Vegas no se destruya OnLoad... No pasa nada, ¿no?)
+    // Singleton (Esto hace actualmente que Big Vegas no se destruya OnLoad... No pasa nada, ï¿½no?)
+    //si pasaba xdxd
     void Awake()
     {
+        auxAssigns = GameObject.FindWithTag("AuxAssigns");
+        battleTransitionManager = GameObject.FindWithTag("GameManager");
+
+        /*
         if (Instance == null)
         {
             Instance = this;
@@ -49,6 +57,7 @@ public class BattleController : MonoBehaviour
         }
         else
             Destroy(gameObject);
+            */
     }
 
     void Start()
@@ -66,7 +75,7 @@ public class BattleController : MonoBehaviour
         partnerMenu.OnChangePartner += ChangePartner;
         partnerMenu.OnBack += ReturnToBattleMenu;
 
-        // Ataques del compañero
+        // Ataques del compaï¿½ero
         partnerAttackMenu.OnPartnerSkillSelected += OnPartnerSkillSelected;
         partnerAttackMenu.OnBack += ReturnToPlayerTurn;
 
@@ -74,7 +83,7 @@ public class BattleController : MonoBehaviour
         attackMinigame.OnMinigameHit += OnHit;
         attackMinigame.OnFinishMinigame += OnMinigameFinished;
 
-        // Compañero inicial
+        // Compaï¿½ero inicial
         if (partnersAvailable.Length > 0)
             currentPartner = partnersAvailable[0];
 
@@ -120,9 +129,10 @@ public class BattleController : MonoBehaviour
 
     // ====== TURNO JUGADOR ======
 
-    // Los pongo en métodos separados porque es posible que reuse esto sin pasarle nada...
+    // Los pongo en mï¿½todos separados porque es posible que reuse esto sin pasarle nada...
     void StartPlayerTurn()
     {
+
         if (playerHealth.ShouldSkipTurn())
         {
             Debug.Log("Jugador tiene stun, pierde turno");
@@ -148,13 +158,18 @@ public class BattleController : MonoBehaviour
         *    Debug.Log("El enemigo sigue vivo, empezando su turno");
         *    StartEnemyTurn();
         }*/
-            
+
     }
 
-    // ====== TURNO COMPAÑERO =====
+    // ====== TURNO COMPAï¿½ERO =====
 
     void StartPartnerTurn()
     {
+        if (auxAssigns.GetComponent<AuxiliarAssigns>().botÃ³nAtaquePartner.GetComponent<SkillsPatch>().turnosLulÃºBuff > 0)
+            auxAssigns.GetComponent<AuxiliarAssigns>().botÃ³nAtaquePartner.GetComponent<SkillsPatch>().turnosLulÃºBuff--;
+        if (auxAssigns.GetComponent<AuxiliarAssigns>().botÃ³nAtaquePartner.GetComponent<SkillsPatch>().turnosParsifalBuff > 0)
+            auxAssigns.GetComponent<AuxiliarAssigns>().botÃ³nAtaquePartner.GetComponent<SkillsPatch>().turnosParsifalBuff--;
+
         if (currentPartner == null)
         {
             StartEnemyTurn();
@@ -188,7 +203,7 @@ public class BattleController : MonoBehaviour
         currentPartner = selectedPartner;
         SpawnPartner(currentPartner);
 
-        Debug.Log("Compañero cambiado a: " + currentPartner.name);
+        Debug.Log("Compaï¿½ero cambiado a: " + currentPartner.name);
 
         // cambiar consume turno completo
         partnerMenu.Close();
@@ -196,7 +211,7 @@ public class BattleController : MonoBehaviour
     }
 
     // ====== TURNO ENEMIGO ======
-    void StartEnemyTurn()
+    public void StartEnemyTurn()
     {
         if (enemyHealth.ShouldSkipTurn())
         {
@@ -212,16 +227,17 @@ public class BattleController : MonoBehaviour
         if (skill != null)
             ApplySkill(skill, false);
 
-        if (!playerHealth.IsDead){
+        if (!playerHealth.IsDead)
+        {
             playerHealth.TickModifier();
             enemyHealth.TickModifier();
 
             Invoke(nameof(StartPlayerTurn), 1.2f);
         }
-            
+
     }
 
-    // ====== MENÚS ======
+    // ====== MENï¿½S ======
 
     void OpenAttackMenu()
     {
@@ -249,7 +265,7 @@ public class BattleController : MonoBehaviour
         currentSkill = skill;
         attackMenu.Close();
 
-        if (skill.useMinigame) // ¿Tiene minijuego?
+        if (skill.useMinigame) // ï¿½Tiene minijuego?
         {
             playerInput.SwitchCurrentActionMap("Minigame");
             Debug.Log("Skill con minijuego");
@@ -262,7 +278,7 @@ public class BattleController : MonoBehaviour
         {
             Debug.Log("Skill sin minijuego");
 
-            // Pedir daño directo
+            // Pedir daï¿½o directo
             ApplySkill(skill, true);
             EndPlayerTurn();
         }
@@ -304,12 +320,12 @@ public class BattleController : MonoBehaviour
 
     // ====== FIN POR MUERTE ======
 
-    void OnEnemyDeath()
+    public void OnEnemyDeath()
     {
         Debug.Log("Fin de batalla");
 
         currentEnemy.Die();
-        BattleTransitionManager.Instance.EndBattle();
+        battleTransitionManager.GetComponent<BattleTransitionManager>().EndBattle();
         playerInput.SwitchCurrentActionMap("Player");
     }
 
@@ -317,8 +333,8 @@ public class BattleController : MonoBehaviour
     {
         Debug.Log("Jugador muerto, fin de batalla");
 
-        // Método provisional, esto tendría que llevar a una pantalla de game over
-        BattleTransitionManager.Instance.EndBattle();
+        // Mï¿½todo provisional, esto tendrï¿½a que llevar a una pantalla de game over
+        battleTransitionManager.GetComponent<BattleTransitionManager>().EndBattle();
         playerInput.SwitchCurrentActionMap("Player");
     }
 }

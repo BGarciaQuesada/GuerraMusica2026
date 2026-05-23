@@ -3,13 +3,13 @@ using UnityEngine;
 public class PartnerCombat : MonoBehaviour
 {
     [Header("Info")]
-    [SerializeField] private string partnerName;
+    public string partnerName;
     [SerializeField] private GameObject partnerPrefab;
 
-    [Header("Skills del compañero")]
-    [SerializeField] private SOSkill[] skills;
+    [Header("Skills del compaï¿½ero")]
+    public SOSkill[] skills;
 
-    // BattleController pedirá esto para mostrar en el menú
+    // BattleController pedirï¿½ esto para mostrar en el menï¿½
     public SOSkill[] GetSkills()
     {
         return skills;

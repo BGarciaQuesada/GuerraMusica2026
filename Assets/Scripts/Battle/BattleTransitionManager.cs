@@ -1,10 +1,13 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
-// El punto de esta clase es pararlo todo, llamar a BattleTransitionUI para transportar mientras eso ocurre, devolver a la posición normal tras combate
+// El punto de esta clase es pararlo todo, llamar a BattleTransitionUI para transportar mientras eso ocurre, devolver a la posiciï¿½n normal tras combate
 public class BattleTransitionManager : MonoBehaviour
 {
+
+    public GameObject auxAssigns;
     public static BattleTransitionManager Instance;
 
     [Header("Battle Arena")]
@@ -26,14 +29,19 @@ public class BattleTransitionManager : MonoBehaviour
     Transform currentPlayer;
 
     void Awake()
-    {
+    {/*
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else 
-            Destroy(gameObject);
+            Destroy(gameObject);*/
+    }
+
+    void OnEnable()
+    {
+       auxAssigns = GameObject.FindWithTag("AuxAssigns"); 
     }
 
 
@@ -58,14 +66,15 @@ public class BattleTransitionManager : MonoBehaviour
         // tp
         TeleportToBattle();
 
-        // Cambiar a cámara de Battle Plane
+        // Cambiar a cï¿½mara de Battle Plane
         worldCamera.gameObject.SetActive(false);
         battleCamera.gameObject.SetActive(true);
 
         // Mostrar UI de batalla
         battleUI.SetActive(true);
+        
 
-        // Esperar un poco (para apreciar la transición, se puede quitar si eso)
+        // Esperar un poco (para apreciar la transiciï¿½n, se puede quitar si eso)
         yield return new WaitForSecondsRealtime(0.5f);
 
         // Destapar pantalla
@@ -73,7 +82,9 @@ public class BattleTransitionManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        BattleController.Instance.StartBattle(currentEnemy);
+        //BattleController.Instance.StartBattle(currentEnemy);
+
+        currentPlayer.gameObject.GetComponent<BattleController>().StartBattle(currentEnemy);
     }
 
     void TeleportToBattle()
@@ -85,7 +96,18 @@ public class BattleTransitionManager : MonoBehaviour
     #region Finish Battle
     public void EndBattle()
     {
+        auxAssigns.GetComponent<AuxiliarAssigns>().battleMenuObj.transform.GetChild(2).gameObject.SetActive(true);
+        if(currentPlayer.gameObject.GetComponent<PlayerHealth>().CurrentHP <= 0)
+        {
+            BackToMenu();
+        }
+        else
         StartCoroutine(ExitBattle());
+    }
+
+    private void BackToMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 
     IEnumerator ExitBattle()
@@ -98,14 +120,14 @@ public class BattleTransitionManager : MonoBehaviour
         // tp
         TeleportPlayer(currentPlayer, playerWorldPosition, playerWorldRotation);
 
-        // Cambiara a cámara del jugador
+        // Cambiara a cï¿½mara del jugador
         battleCamera.gameObject.SetActive(false);
         worldCamera.gameObject.SetActive(true);
 
         // Ocultar UI de batalla
         battleUI.SetActive(false);
 
-        // Esperar un poco (para apreciar la transición, se puede quitar si eso)
+        // Esperar un poco (para apreciar la transiciï¿½n, se puede quitar si eso)
         yield return new WaitForSecondsRealtime(0.5f);
 
         // Destapar pantalla

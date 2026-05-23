@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: EgoDeDiyoqui
   m_EditorClassIdentifier: Assembly-CSharp::SOSkill
   skillName: Ego de Diyoqui
-  perfectDamage: 20
-  goodDamage: 10
+  perfectDamage: 5
+  goodDamage: 2
   heal: 1
-  healAmount: 30
+  healAmount: 10
   buff: 0
   buffAmount: 0
   buffTurns: 0

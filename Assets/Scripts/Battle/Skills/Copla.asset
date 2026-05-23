@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Copla
   m_EditorClassIdentifier: Assembly-CSharp::SOSkill
   skillName: Copla
-  perfectDamage: 40
-  goodDamage: 40
+  perfectDamage: 10
+  goodDamage: 10
   heal: 0
   healAmount: 0
   buff: 0

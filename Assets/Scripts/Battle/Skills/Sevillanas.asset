@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Sevillanas
   m_EditorClassIdentifier: Assembly-CSharp::SOSkill
   skillName: Sevillanas
-  perfectDamage: 50
-  goodDamage: 50
+  perfectDamage: 10
+  goodDamage: 10
   heal: 0
   healAmount: 0
   buff: 0

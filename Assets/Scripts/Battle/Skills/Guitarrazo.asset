@@ -13,8 +13,16 @@ MonoBehaviour:
   m_Name: Guitarrazo
   m_EditorClassIdentifier: Assembly-CSharp::SOSkill
   skillName: Guitarrazo
-  perfectDamage: 10
-  goodDamage: 10
-  useMinigame: 0
-  stun: 0
+  perfectDamage: 5
+  goodDamage: 5
+  heal: 0
+  healAmount: 0
   buff: 0
+  buffAmount: 0
+  buffTurns: 0
+  debuff: 0
+  debuffAmount: 0
+  debuffTurns: 0
+  stun: 0
+  stunTurns: 0
+  useMinigame: 0

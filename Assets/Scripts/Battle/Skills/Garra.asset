@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Garra
   m_EditorClassIdentifier: Assembly-CSharp::SOSkill
   skillName: Garra
-  perfectDamage: 20
-  goodDamage: 20
+  perfectDamage: 5
+  goodDamage: 5
   heal: 0
   healAmount: 0
   buff: 0

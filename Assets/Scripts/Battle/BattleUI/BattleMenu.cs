@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
 
-// Esta clase engloba las acciones de los botones del menú de acciones durante el turno del jugador
+// Esta clase engloba las acciones de los botones del menï¿½ de acciones durante el turno del jugador
 public class BattleMenu : MonoBehaviour
 {
+    //------
+    public GameObject battleMenu, partnerAttackMenu;
     public event Action OnAttack;
     public event Action OnPartner;
     public event Action OnRun;
@@ -13,5 +15,17 @@ public class BattleMenu : MonoBehaviour
 
     public void AttackPressed() => OnAttack?.Invoke();
     public void PartnerPressed() => OnPartner?.Invoke();
-    public void RunPressed() => OnRun?.Invoke();
+    public void RunPressed()
+    {
+        battleMenu.SetActive(false);
+    }
+
+    //------
+
+    /*public void Back()
+    {
+        partnerAttackMenu.SetActive(false);
+        battleMenu.SetActive(true);
+    }*/
+    
 }

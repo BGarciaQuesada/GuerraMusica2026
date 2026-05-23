@@ -13,8 +13,16 @@ MonoBehaviour:
   m_Name: RiffDeathMetal
   m_EditorClassIdentifier: Assembly-CSharp::SOSkill
   skillName: Riffs death metal
-  perfectDamage: 20
-  goodDamage: 10
-  useMinigame: 1
-  stun: 0
+  perfectDamage: 30
+  goodDamage: 20
+  heal: 0
+  healAmount: 0
   buff: 0
+  buffAmount: 0
+  buffTurns: 0
+  debuff: 0
+  debuffAmount: 0
+  debuffTurns: 0
+  stun: 0
+  stunTurns: 0
+  useMinigame: 1

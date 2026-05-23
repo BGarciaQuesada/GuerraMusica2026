@@ -90,8 +90,8 @@ public class SOSkill : ScriptableObject
             if (stun)
                 player.ApplyStun(stunTurns);
 
-            if (buff)
-                player.ApplyDamageModifier(buffAmount, buffTurns);
+            /*if (buff)
+                player.ApplyDamageModifier(buffAmount, buffTurns);*/
 
             if (heal)
                 player.Heal(healAmount);

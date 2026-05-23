@@ -1,17 +1,19 @@
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int maxHP = 50;
-    private int currentHP;
+    public int currentHP;
 
     // Getters de salud
     public int MaxHP => maxHP;
     public int CurrentHP => currentHP;
 
-    [SerializeField] private int damageModifier = 0;
-    [SerializeField] private int modifierTurns = 0;
+    public int damageModifier = 0;
+    
+    public int modifierTurns = 0;
     
     [SerializeField] private int stunTurnsRemaining = 0; // Turnos que se queda KO
 
@@ -22,6 +24,14 @@ public class PlayerHealth : MonoBehaviour
     void Awake()
     {
         currentHP = maxHP;
+    }
+
+    void Update()
+    {
+        if(currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
     }
 
     public void TakeDamage(int dmg)

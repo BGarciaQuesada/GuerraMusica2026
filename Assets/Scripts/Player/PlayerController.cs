@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,7 +17,7 @@ public class PlayerController : MonoBehaviour
     // public float jumpHeight = 1.5f;
 
     [Header("Ground Check")]
-    public Transform groundCheck;           // Un objeto vacÌo a los pies que sirve para comprobar si el personaje est· en el suelo.
+    public Transform groundCheck;           // Un objeto vacÔøΩo a los pies que sirve para comprobar si el personaje estÔøΩ en el suelo.
     public float groundDistance = 0.25f;
     public LayerMask groundMask;            // Capa de suelo
 
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
 
     Vector2 moveInput;
     Vector3 velocity;
-    bool isWalking;                         // CÛmo lo general es que corra... Pues que lo haga autom·tico y que el jugador decida si quiere andar
+    bool isWalking;                         // CÔøΩmo lo general es que corra... Pues que lo haga automÔøΩtico y que el jugador decida si quiere andar
 
     void Awake()
     {
@@ -34,8 +35,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // [!] A lo mejor es por estar aquÌ desde las 5AM, pero no logro hacer que lo de el mantener el botÛn funcione de otra forma. Voy a comprobar aquÌ si est· pulsado y preguntar luego.........
-        isWalking = Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed;
+        // [!] A lo mejor es por estar aquÔøΩ desde las 5AM, pero no logro hacer que lo de el mantener el botÔøΩn funcione de otra forma. Voy a comprobar aquÔøΩ si estÔøΩ pulsado y preguntar luego.........
+        //isWalking = //Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed;
+        //Tambien puedes hacer esto ^ ‚èù ^
+        if(Input.GetKey(KeyCode.LeftShift)) isWalking = true; else{isWalking = false;}
 
 
         HandleMovement();
@@ -50,10 +53,11 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
+        Debug.Log("Movement");
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         float speed = isWalking ? walkSpeed : runSpeed;
 
-        characterController.Move(move * speed * Time.deltaTime);
+        characterController.Move(speed * Time.deltaTime * move);
     }
 
     // ================= GRAVITY & JUMP =================
